@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Thiệp tình yêu 💌</title>
+<style>
+:root{
+  --brand:#e94e77;
+  --ink:#1f2937;
+  --muted:#6b7280;
+  --paper:#fffdf8;
+  --cover:#fff;
+  --bg:#f8bbd0;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; overflow:hidden;
+  min-height:100vh;
+  background:var(--bg);
+  font-family:"Segoe UI",system-ui,sans-serif;
+  display:flex; justify-content:center; align-items:center;
+}
+
+/* trái tim động */
+#pinkboard{
+  position:absolute;
+  top:50%; 
+  left:50%;
+  width:800px; 
+  height:800px;
+  transform:translate(-50%,-50%);
+  animation:beat 1.5s ease infinite;
+  cursor:pointer;
+  z-index:2;
+}
+@keyframes beat{
+  0%,100%{transform:translate(-50%,-50%) scale(1);}
+  30%{transform:translate(-50%,-50%) scale(.9);}
+}
+
+/* chữ “MỞ ĐI” trên tim */
+#openText{
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  color:#fff; font-weight:800; font-size:28px;
+  text-shadow:0 0 8px rgba(0,0,0,.3);
+  cursor:pointer;
+  z-index:3;
+  color: #ff0000
+}
+
+/* Thiệp (ẩn lúc đầu) */
+.hidden{display:none;}
+.stage{perspective:1600px;}
+.card{
+  position:relative; width:min(820px,96vw); height:520px;
+  background:var(--paper);
+  border-radius:18px; box-shadow:0 28px 70px rgba(0,0,0,.18);
+  border:1px solid rgba(0,0,0,.06); overflow:hidden;
+}
+.inner{
+  position:absolute; inset:0; display:grid; grid-template-columns:1fr 1fr;
+}
+.page{padding:28px 26px;}
+.left{
+  background:radial-gradient(900px 260px at -10% 0%, rgba(233,78,119,.08), transparent 60%), var(--paper);
+}
+.right{
+  background:radial-gradient(900px 260px at 110% 0%, rgba(233,78,119,.08), transparent 60%), var(--paper);
+}
+.ribbon{display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(233,78,119,.12);color:var(--brand);font-weight:800;letter-spacing:.3px;font-size:12px;}
+h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
+.lead{color:var(--muted);font-size:18px;margin:0 0 12px}
+.section-title{text-transform:uppercase;font-size:12px;letter-spacing:.5px;color:var(--muted);margin:14px 0 6px}
+.big{font-size:22px;font-weight:800;line-height:1.35;}
+.note{color:var(--muted);margin-top:6px}
+
+/* bìa thiệp */
+.cover{
+  position:absolute;top:0;bottom:0;right:0;width:50%;
+  transform-origin:left center;
+  transform-style:preserve-3d;
+  transition:transform .9s cubic-bezier(.2,.7,.2,1);
+  background:var(--cover);
+  border-left:1px solid rgba(0,0,0,.06);
+}
+.cover-outer,.cover-inner{
+  position:absolute;inset:0;backface-visibility:hidden;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;padding:32px;
+}
+.cover-outer{
+  background:radial-gradient(1200px 300px at 50% -10%, rgba(233,78,119,.12), transparent 60%), var(--cover);
+}
+.cover-inner{transform:rotateY(180deg);background:#fff7fa;}
+.card.open .cover{transform:rotateY(-180deg);}
+.hint{text-align:center;margin-top:12px;color:var(--muted);font-size:14px}
+
+/* ô mật khẩu */
+.password-box{
+  margin-top:20px;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:16px;text-align:center;
+}
+.password-box input{
+  padding:8px 10px;border:1px solid rgba(0,0,0,.2);border-radius:8px;width:70%;
+  font-size:15px;outline:none;
+}
+.password-box button{
+  margin-top:10px;padding:8px 12px;border:none;background:var(--brand);color:#fff;
+  border-radius:8px;font-weight:700;cursor:pointer;
+}
+.msg{margin-top:8px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- Trái tim động -->
+<canvas id="pinkboard"></canvas>
+<div id="openText">MỞ ĐI 💌</div>
+
+
+<!-- Thiệp (ẩn) -->
+<div class="stage hidden" id="inviteStage">
+  <div class="card" id="card">
+    <div class="inner">
+      <div class="page left">
+        <span class="ribbon">THIỆP MỜI</span>
+        <h1 contenteditable="true">Gửi đến em</h1>
+        <p class="lead" contenteditable="true">Muốn đọc lời anh gửi – hãy nhập mật khẩu nhé 💌</p>
+
+        <div class="password-box">
+          <input type="password" id="pw" placeholder="Nhập mật khẩu...">
+          <br>
+          <button id="checkBtn">Mở thiệp</button>
+          <div class="msg" id="msg">Gợi ý: tên viết tắt của hai đứa ♥</div>
+        </div>
+      </div>
+
+      <div class="page right">
+        <div class="section-title">Lời nhắn</div>
+        <div class="big" contenteditable="true">
+          “Cảm ơn em đã luôn bên anh.<br>Chúc em ngày mới thật vui vẻ và tràn đầy yêu thương.”
+        </div>
+        <p class="note" contenteditable="true">Từ anh, người luôn thương em ♥</p>
+      </div>
+    </div>
+
+    <div class="cover" id="cover">
+      <div class="cover-outer">
+        <h2>Thiệp gửi riêng cho em</h2>
+        <p class="lead">Bấm để mở</p>
+      </div>
+      <div class="cover-inner">
+        <p class="lead">♥ Anh rất vui vì em đã mở thiệp ♥</p>
+      </div>
+    </div>
+  </div>
+  <div class="hint">Gợi ý: nhập đúng mật khẩu rồi bấm “Mở thiệp”.</div>
+</div>
+
+<script>
+/* ------------------ LOGIC ------------------- */
+const openText = document.getElementById('openText');
+const canvasHeart = document.getElementById('pinkboard');
+const stage = document.getElementById('inviteStage');
+const card = document.getElementById('card');
+const btn = document.getElementById('checkBtn');
+const msg = document.getElementById('msg');
+const pw = document.getElementById('pw');
+const password = "HN"; // mật khẩu
+
+openText.addEventListener('click', ()=>{
+  canvasHeart.style.display='none';
+  openText.style.display='none';
+  stage.classList.remove('hidden');
+});
+
+btn.addEventListener('click', ()=>{
+  if(pw.value.trim().toLowerCase()===password.toLowerCase()){
+    card.classList.add('open');
+    msg.textContent="✔ Mật khẩu đúng! Thiệp đang mở...";
+    msg.style.color="green";
+  }else{
+    msg.textContent="❌ Sai mật khẩu rồi, thử lại nhé!";
+    msg.style.color="red";
+  }
+});
+
+/* ------------------ HIỆU ỨNG TRÁI TIM ------------------- */
+var settings = {
+  particles:{length:1200,duration:2,velocity:130,effect:-0.35,size:14}
+};
+(function(){
+  var Point=function(x,y){this.x=x||0;this.y=y||0};
+  Point.prototype.clone=function(){return new Point(this.x,this.y)};
+  Point.prototype.length=function(len){
+    if(len===undefined)return Math.sqrt(this.x*this.x+this.y*this.y);
+    this.normalize();this.x*=len;this.y*=len;return this;
+  };
+  Point.prototype.normalize=function(){
+    var l=this.length();this.x/=l;this.y/=l;return this;
+  };
+  var Particle=function(){
+    this.position=new Point();this.velocity=new Point();this.acceleration=new Point();this.age=0;
+  };
+  Particle.prototype.initialize=function(x,y,dx,dy){
+    this.position.x=x;this.position.y=y;
+    this.velocity.x=dx;this.velocity.y=dy;
+    this.acceleration.x=dx*settings.particles.effect;
+    this.acceleration.y=dy*settings.particles.effect;
+    this.age=0;
+  };
+  Particle.prototype.update=function(d){
+    this.position.x+=this.velocity.x*d;
+    this.position.y+=this.velocity.y*d;
+    this.velocity.x+=this.acceleration.x*d;
+    this.velocity.y+=this.acceleration.y*d;
+    this.age+=d;
+  };
+  Particle.prototype.draw=function(ctx,img){
+    var ease=t=>--t*t*t+1;
+    var size=img.width*ease(this.age/settings.particles.duration);
+    ctx.globalAlpha=1-this.age/settings.particles.duration;
+    ctx.drawImage(img,this.position.x-size/2,this.position.y-size/2,size,size);
+  };
+  var ParticlePool=function(l){
+    var particles=new Array(l);
+    for(let i=0;i<l;i++)particles[i]=new Particle();
+    var firstActive=0,firstFree=0,duration=settings.particles.duration;
+    this.add=function(x,y,dx,dy){
+      particles[firstFree].initialize(x,y,dx,dy);
+      firstFree=(firstFree+1)%l;
+      if(firstActive===firstFree)firstActive=(firstActive+1)%l;
+    };
+    this.update=function(dt){
+      var i;
+      if(firstActive<firstFree){
+        for(i=firstActive;i<firstFree;i++)particles[i].update(dt);
+      }else{
+        for(i=firstActive;i<l;i++)particles[i].update(dt);
+        for(i=0;i<firstFree;i++)particles[i].update(dt);
+      }
+      while(particles[firstActive].age>=duration && firstActive!==firstFree){
+        firstActive=(firstActive+1)%l;
+      }
+    };
+    this.draw=function(ctx,img){
+      var i;
+      if(firstActive<firstFree){
+        for(i=firstActive;i<firstFree;i++)particles[i].draw(ctx,img);
+      }else{
+        for(i=firstActive;i<l;i++)particles[i].draw(ctx,img);
+        for(i=0;i<firstFree;i++)particles[i].draw(ctx,img);
+      }
+    };
+  };
+
+  (function(canvas){
+    var ctx=canvas.getContext('2d');
+    var particles=new ParticlePool(settings.particles.length);
+    var particleRate=settings.particles.length/settings.particles.duration;
+    var time;
+
+    function pointOnHeart(t){
+      return new Point(
+        160*Math.pow(Math.sin(t),3),
+        130*Math.cos(t)-50*Math.cos(2*t)-20*Math.cos(3*t)-10*Math.cos(4*t)+25
+      );
+    }
+
+    var image=(function(){
+      var c=document.createElement('canvas'),ctx2=c.getContext('2d');
+      c.width=settings.particles.size;c.height=settings.particles.size;
+      function to(t){
+        var p=pointOnHeart(t);
+        p.x=settings.particles.size/3+p.x*settings.particles.size/550;
+        p.y=settings.particles.size/3-p.y*settings.particles.size/550;
+        return p;
+      }
+      ctx2.beginPath();
+      var t=-Math.PI,p=to(t);ctx2.moveTo(p.x,p.y);
+      while(t<Math.PI){t+=0.01;p=to(t);ctx2.lineTo(p.x,p.y);}
+      ctx2.closePath();ctx2.fillStyle='#ff0000';  
+      ctx2.fill();
+      var img=new Image();img.src=c.toDataURL();return img;
+    })();
+
+    function render(){
+      requestAnimationFrame(render);
+      var newTime=new Date().getTime()/1000,dt=newTime-(time||newTime);time=newTime;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      var amount=particleRate*dt;
+      for(var i=0;i<amount;i++){
+        var pos=pointOnHeart(Math.PI-2*Math.PI*Math.random());
+        var dir=pos.clone().length(settings.particles.velocity);
+        particles.add(canvas.width/2+pos.x,canvas.height/2-pos.y,dir.x,-dir.y);
+      }
+      particles.update(dt);
+      particles.draw(ctx,image);
+    }
+    function onResize(){
+      canvas.width=canvas.clientWidth;
+      canvas.height=canvas.clientHeight;
+    }
+    window.onresize=onResize;
+    setTimeout(function(){onResize();render();},10);
+  })(document.getElementById('pinkboard'));
+})();
+</script>
+</body>
+</html>
