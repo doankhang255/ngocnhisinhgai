@@ -56,19 +56,17 @@ body{
 .stage{perspective:1600px;}
 
 /* Card responsive: hơi cao (5/6), không tràn màn hình */
-.card{
-  position: relative;
-  width: 500px;      /* 👈 chiều rộng thiệp */
-  height: 820px;     /* 👈 chiều cao thiệp – chỉnh cao hơn nếu muốn dài hơn */
-  max-width: 96vw;   /* vẫn co lại trên điện thoại */
-  max-height: 92vh;  /* không tràn màn hình */
-  background: var(--paper);
-  border-radius: 18px;
-  box-shadow: 0 28px 70px rgba(0,0,0,.18);
-  border: 1px solid rgba(0,0,0,.06);
-  overflow: hidden;
-}
-
+  .card{
+    position:relative;
+    width:min(520px, 96vw);
+    height:520px;
+    background:var(--paper);
+    border-radius:18px;
+    box-shadow:0 28px 70px rgba(0,0,0,.18);
+    border:1px solid var(--edge);
+    overflow:hidden;
+  }
+  
 /* Trang trong */
 .inner{ position:absolute; inset:0; display:grid; grid-template-columns:1fr 1fr; z-index:1; }
 .page{ padding:28px 26px; }
