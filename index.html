@@ -31,8 +31,8 @@ body{
   position:absolute;
   top:50%; 
   left:50%;
-  width:min(60vw, 600px);
-  height:min(60vw, 600px);
+  width:min(90vw, 600px);
+  height:min(90vw, 600px);
   transform:translate(-50%,-50%);
   animation:beat 1.5s ease infinite;
   cursor:pointer;
@@ -169,33 +169,44 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 .pin-hidden-input{ position:absolute; opacity:0; pointer-events:none; width:0; height:0; }
 
 /* Mobile tweaks */
+/* Mobile fix: hiển thị đủ thiệp, không bị khuất */
 @media (max-width: 640px){
-  /* cho phép cuộn dọc khi nội dung dài */
-  body { overflow-y: auto; }
+  /* Cho phép cuộn dọc + chừa vùng notch */
+  html, body { height: auto; overflow-y: auto; }
+  body {
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-bottom: 16px;
+  }
 
-  /* card tự co theo nội dung, không ép tỉ lệ trên mobile */
+  /* Thu nhỏ trái tim để không đè nội dung */
+  #pinkboard{
+    width: min(70vw, 360px);
+    height: min(70vw, 360px);
+  }
+
+  /* Card co theo nội dung, không ép tỉ lệ trên mobile */
   .card{
-    width: min(96vw, var(--card-w));
-    aspect-ratio: auto;   /* override lại */
+    width: min(96vw, 560px);
+    aspect-ratio: auto;  /* override giá trị desktop */
     height: auto;
-    max-height: none;     /* đừng giới hạn chiều cao */
+    margin: 10px auto 20px;  /* tạo khoảng hở trên/dưới */
   }
 
-  /* VERY IMPORTANT: bỏ position:absolute để .inner cao theo nội dung */
+  /* QUAN TRỌNG: để nội dung tự đẩy chiều cao thay vì absolute */
   .inner{
-    position: static;      /* thay vì absolute */
-    inset: auto;           /* xoá ràng buộc inset */
-    grid-template-columns: 1fr;  /* đã có, giữ nguyên */
+    position: relative;   /* trước là absolute */
+    inset: auto;
+    display: grid;
+    grid-template-columns: 1fr; /* xếp 1 cột: trái rồi tới phải */
   }
 
-  /* giảm padding để bớt chiếm chỗ */
   .page{ padding: 18px 16px; }
 
-  /* giữ logic bìa gập theo trục X */
+  /* Bìa gập theo trục X, phủ toàn chiều ngang */
   .cover{
-    width:100%;
-    border-left:none;
-    border-top:1px solid rgba(0,0,0,.06);
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid rgba(0,0,0,.06);
     transform-origin: top center;
   }
   .card.open .cover{ transform: rotateX(-180deg); }
@@ -214,13 +225,13 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
     <div class="inner">
       <div class="page left">
         <span class="ribbon">THIỆP TỈNH CỦM</span>
-        <h1 contenteditable="true">Gửi đến em</h1>
-        <p class="lead" contenteditable="true">Muốn đọc lời anh gửi – hãy nhập mã số nhé 💌</p>
+        <h2 class = "big">Gửi đến em</h2>
+        <p class="lead">chức mừng 2 tháng mình bên nhau ợ - và 20-10 hẹ hẹ ❤️</p>
 
         <!-- Hộp PIN custom -->
         <div class="pin-box pin-theme" aria-label="Nhập mã PIN">
           <div class="pin-header">
-            <div class="pin-title">Nhập mã số</div>
+            <div class="pin-title">NHÍ IU</div>
             <button class="pin-eye" id="toggleMask" aria-label="Hiện/ẩn số" title="Hiện/ẩn số"></button>
           </div>
 
