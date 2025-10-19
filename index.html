@@ -62,18 +62,19 @@ body{
 /* Thiệp (ẩn lúc đầu) */
 .hidden{display:none;}
 .stage{perspective:1600px;}
+/* Card responsive: vuông, co theo màn hình, không tràn */
 .card{
   position: relative;
-  width: min(var(--card-w), 96vw);
-  aspect-ratio: var(--card-ratio);   /* tự tính chiều cao theo tỉ lệ */
-  height: auto;                      /* để aspect-ratio quản */
+  width: min(560px, 96vw);   /* như bản đầu */
+  aspect-ratio: 1 / 1;       /* luôn vuông */
+  max-height: min(88vh, 680px); /* không vượt quá chiều cao màn hình */
+  height: auto;
   background: var(--paper);
   border-radius: 18px;
   box-shadow: 0 28px 70px rgba(0,0,0,.18);
   border: 1px solid rgba(0,0,0,.06);
   overflow: hidden;
 }
-
 .inner{
   position:absolute; inset:0; display:grid; grid-template-columns:1fr 1fr;
 }
@@ -178,38 +179,22 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
     padding-bottom: 16px;
   }
 
-  /* Thu nhỏ trái tim để không đè nội dung */
+  /* Thu nhỏ trái tim để không đè nội dung (giữ nguyên nếu cô thích) */
   #pinkboard{
     width: min(70vw, 360px);
     height: min(70vw, 360px);
   }
 
-  /* Card co theo nội dung, không ép tỉ lệ trên mobile */
+  /* Card giữ tỉ lệ vuông như bản đầu, chỉ thu nhỏ theo màn hình */
   .card{
-    width: min(96vw, 560px);
-    aspect-ratio: auto;  /* override giá trị desktop */
+    width: 94vw;
+    max-height: 86vh;
+    aspect-ratio: 1 / 1;   /* KHÔNG để auto nữa */
     height: auto;
-    margin: 10px auto 20px;  /* tạo khoảng hở trên/dưới */
+    margin: 10px auto 20px;
   }
 
-  /* QUAN TRỌNG: để nội dung tự đẩy chiều cao thay vì absolute */
-  .inner{
-    position: relative;   /* trước là absolute */
-    inset: auto;
-    display: grid;
-    grid-template-columns: 1fr; /* xếp 1 cột: trái rồi tới phải */
-  }
-
-  .page{ padding: 18px 16px; }
-
-  /* Bìa gập theo trục X, phủ toàn chiều ngang */
-  .cover{
-    width: 100%;
-    border-left: none;
-    border-top: 1px solid rgba(0,0,0,.06);
-    transform-origin: top center;
-  }
-  .card.open .cover{ transform: rotateX(-180deg); }
+  /* Các phần mobile khác của cô giữ nguyên */
 }
 </style>
 </head>
