@@ -57,16 +57,16 @@ body{
 
 /* Card responsive: hơi cao (5/6), không tràn màn hình */
 .card{
-  position:relative;
-  width:min(560px, 96vw);
-  aspect-ratio:5/6;
-  max-height:min(92vh, 720px);
-  height:auto;
-  background:var(--paper);
-  border-radius:18px;
-  box-shadow:0 28px 70px rgba(0,0,0,.18);
-  border:1px solid rgba(0,0,0,.06);
-  overflow:hidden;
+  position: relative;
+  width: 500px;      /* 👈 chiều rộng thiệp */
+  height: 820px;     /* 👈 chiều cao thiệp – chỉnh cao hơn nếu muốn dài hơn */
+  max-width: 96vw;   /* vẫn co lại trên điện thoại */
+  max-height: 92vh;  /* không tràn màn hình */
+  background: var(--paper);
+  border-radius: 18px;
+  box-shadow: 0 28px 70px rgba(0,0,0,.18);
+  border: 1px solid rgba(0,0,0,.06);
+  overflow: hidden;
 }
 
 /* Trang trong */
@@ -224,9 +224,9 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 
       <div class="page right">
         <div class="section-title">Lời nhắn</div>
-        <div class="big">
-          Chúc mừng ngày phụ nữ Việt Nam 20/10! và cũng 2 tháng mình bên nhau rồi. Ngày hôm nay anh muốn dành tất cả những lời chúc tốt đẹp nhất đến em, người con gái mà anh yêu thương. 
-          Cảm ơn em đã bên anh trong thời gian qua (cụ thể 2 tháng hẹ hẹ). Cảm ơn em luôn hiểu cho anh, em luôn là nguồn cảm hứng và lý do anh luôn cố gắng để trở thành người tốt hơn.<br>Chúc em ngày mới thật vui vẻ và tràn đầy yêu thương.
+        <div> <h3>Chúc mừng ngày phụ nữ Việt Nam 20/10! và cũng 2 tháng mình bên nhau rồi. Ngày hôm nay anh muốn dành tất cả những lời chúc tốt đẹp nhất đến em, người con gái mà anh yêu thương. 
+          Cảm ơn em đã bên anh trong thời gian qua (cụ thể 2 tháng hẹ hẹ). Cảm ơn em luôn hiểu cho anh, em luôn là nguồn cảm hứng và lý do anh luôn cố gắng để trở thành người tốt hơn.
+          <br>Chúc em ngày mới thật vui vẻ và tràn đầy yêu thương.</h3>
         </div>
         <p class="note" contenteditable="true">Từ anh, người luôn thương em ♥</p>
       </div>
