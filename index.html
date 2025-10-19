@@ -85,6 +85,13 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 .section-title{text-transform:uppercase;font-size:12px;letter-spacing:.5px;color:var(--muted);margin:14px 0 6px}
 .big{font-size:22px;font-weight:800;line-height:1.35;}
 .note{color:var(--muted);margin-top:6px}
+.title-love{
+  font-family: "Pacifico", cursive;
+  color:#e94e77;
+  font-size:28px;
+  font-weight:700;
+  text-shadow: 0 0 6px rgba(233,78,119,0.2);
+}
 
 /* Bìa gập */
 .cover{
@@ -135,11 +142,13 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
   background:#fff;
   border:1px solid rgba(0,0,0,.08);
   border-radius:16px;
-  padding:16px 12px;
-  text-align:center; user-select:none;
-  width:100%; max-width:340px; margin:0 auto;
-  box-shadow:0 4px 12px rgba(0,0,0,.08);
-  transition:box-shadow .25s ease, border-color .25s ease;
+  padding:14px 12px;   /* 👈 thu hẹp khoảng trống bên trong */
+  width: 260px;        /* 👈 giảm kích thước tổng thể */
+  max-width: 80%;      /* vẫn tự co trên màn hình nhỏ */
+  margin: 0 auto;      /* căn giữa */
+  text-align:center;
+  user-select:none;
+  transition: box-shadow .25s ease, border-color .25s ease;
 }
 .pin-box.success{ box-shadow:0 0 0 4px rgba(16,185,129,.2); border-color:#10b981; }
 .pin-box.error{ animation: pin-shake .4s; border-color:#ef4444; }
@@ -218,7 +227,7 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
     <div class="inner">
       <div class="page left">
         <span class="ribbon">THIỆP TỈNH CỦM</span>
-        <h2 class="big">Gửi đến Nhí IU cụa anh ợ</h2>
+        <h2 class="big title-love">Gửi đến Nhí IU cụa anh ợ</h2>
         <p class="lead">Cảm ơn em đã là một phần cuộc sống của anh ₊· ͟͟͞͞➳❥ ♥‿♥</p>
       </div>
 
