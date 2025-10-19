@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Thiệp tình yêu 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --brand:#e94e77;
@@ -11,7 +12,7 @@
   --muted:#6b7280;
   --paper:#fffdf8;
   --cover:#fff;
-  --bg:#f8bbd0;
+  --bg:#FFFFFF1A;
 }
 
 *{box-sizing:border-box}
@@ -41,16 +42,20 @@ body{
 }
 
 /* chữ “MỞ ĐI” trên tim */
-#openText{
-  position:absolute;
-  top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  color:#fff; font-weight:800; font-size:28px;
-  text-shadow:0 0 8px rgba(0,0,0,.3);
-  cursor:pointer;
-  z-index:3;
-  color: #ff0000
+#openText {
+  position: absolute;
+  top: 48%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Dancing Script", cursive;
+  font-size: 27px;
+  font-weight: 800;
+  color: #ffb6c1;
+  text-shadow: 0 0 14px rgba(255, 105, 180, 0.6);
+  cursor: pointer;
+  z-index: 3;
+  letter-spacing: 1px;
 }
+
 
 /* Thiệp (ẩn lúc đầu) */
 .hidden{display:none;}
@@ -118,7 +123,7 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 
 <!-- Trái tim động -->
 <canvas id="pinkboard"></canvas>
-<div id="openText">MỞ ĐI 💌</div>
+<div id="openText">nhấn vô đây nha 💌</div>
 
 
 <!-- Thiệp (ẩn) -->
@@ -126,7 +131,7 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
   <div class="card" id="card">
     <div class="inner">
       <div class="page left">
-        <span class="ribbon">THIỆP MỜI</span>
+        <span class="ribbon">THIỆP TÌNH YÊU</span>
         <h1 contenteditable="true">Gửi đến em</h1>
         <p class="lead" contenteditable="true">Muốn đọc lời anh gửi – hãy nhập mật khẩu nhé 💌</p>
 
@@ -140,7 +145,7 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 
       <div class="page right">
         <div class="section-title">Lời nhắn</div>
-        <div class="big" contenteditable="true">
+        <div class="big">
           “Cảm ơn em đã luôn bên anh.<br>Chúc em ngày mới thật vui vẻ và tràn đầy yêu thương.”
         </div>
         <p class="note" contenteditable="true">Từ anh, người luôn thương em ♥</p>
@@ -190,7 +195,7 @@ btn.addEventListener('click', ()=>{
 
 /* ------------------ HIỆU ỨNG TRÁI TIM ------------------- */
 var settings = {
-  particles:{length:1200,duration:2,velocity:130,effect:-0.35,size:14}
+  particles:{length:800,duration:1.5,velocity:100,effect:-0.85,size:25}
 };
 (function(){
   var Point=function(x,y){this.x=x||0;this.y=y||0};
@@ -282,7 +287,7 @@ var settings = {
       ctx2.beginPath();
       var t=-Math.PI,p=to(t);ctx2.moveTo(p.x,p.y);
       while(t<Math.PI){t+=0.01;p=to(t);ctx2.lineTo(p.x,p.y);}
-      ctx2.closePath();ctx2.fillStyle='#ff0000';  
+      ctx2.closePath();ctx2.fillStyle='#FF0000';  
       ctx2.fill();
       var img=new Image();img.src=c.toDataURL();return img;
     })();
