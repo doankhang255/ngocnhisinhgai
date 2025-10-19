@@ -79,6 +79,26 @@ body{
   background:radial-gradient(900px 260px at 110% 0%, rgba(233,78,119,.08), transparent 60%), var(--paper);
 }
 
+/* Cho phép phần lời nhắn cuộn nếu quá dài */
+.page.right{
+  position: relative;
+  overflow-y: auto;      /* 👈 bật cuộn dọc */
+  max-height: 100%;      /* giữ trong chiều cao thiệp */
+  padding-right: 10px;   /* chừa khoảng cho thanh cuộn */
+  scrollbar-width: thin; /* thanh cuộn mảnh cho trình duyệt hỗ trợ */
+}
+/* Tùy chỉnh thanh cuộn (cho Chrome, Edge, Safari) */
+.page.right::-webkit-scrollbar {
+  width: 6px;                 /* mảnh vừa phải */
+}
+.page.right::-webkit-scrollbar-thumb {
+  background: #e9a7b3;        /* hồng pastel dịu */
+  border-radius: 6px;
+}
+.page.right::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .ribbon{display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(233,78,119,.12);color:var(--brand);font-weight:800;letter-spacing:.3px;font-size:12px;}
 h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 .lead{color:var(--muted);font-size:18px;margin:0 0 12px}
@@ -94,7 +114,7 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 }
 .yeu{
   font-family: "Pacifico", cursive;
-  color:#e94e77;
+  color:#1f1f1f;
   font-size:28px;
   font-weight:700;
 }
@@ -239,7 +259,7 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 
       <div class="page right">
         <div class="section-title">Lời nhắn</div>
-        <div class ="big yeu"> <h4>Chúc mừng ngày phụ nữ Việt Nam 20/10! và cũng 2 tháng mình bên nhau rồi. Ngày hôm nay anh muốn dành tất cả những lời chúc tốt đẹp nhất đến em, người con gái mà anh yêu thương. 
+        <div> <h4>Chúc mừng ngày phụ nữ Việt Nam 20/10! và cũng 2 tháng mình bên nhau rồi. Ngày hôm nay anh muốn dành tất cả những lời chúc tốt đẹp nhất đến em, người con gái mà anh yêu thương. 
           Cảm ơn em đã bên anh trong thời gian qua (cụ thể 2 tháng hẹ hẹ). Cảm ơn em luôn hiểu cho anh, em luôn là nguồn cảm hứng và lý do anh luôn cố gắng để trở thành người tốt hơn.
           <br>Chúc em ngày mới thật vui vẻ và tràn đầy yêu thương.</h4>
         </div>
