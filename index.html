@@ -10,11 +10,11 @@
   --brand:#e94e77;
   --ink:#1f2937;
   --muted:#6b7280;
-  --paper:#fffdf8;
-  --cover:#fff;
+  --paper:#FFF8F9;
+  --cover:#FFF0F5;
   --bg:#FFFFFF1A;
   --card-w: 500px;   /* chiều rộng mục tiêu (preset VỪA) */
-  --card-ratio: 3/4; /* tỉ lệ rộng:cao của thiệp */
+  --card-ratio: 5/6; /* tỉ lệ rộng:cao của thiệp */
 }
 
 *{box-sizing:border-box}
@@ -31,13 +31,14 @@ body{
   position:absolute;
   top:50%; 
   left:50%;
-  width:500px; 
-  height:500px;
+  width:min(60vw, 450px);
+  height:min(60vw, 450px);
   transform:translate(-50%,-50%);
   animation:beat 1.5s ease infinite;
   cursor:pointer;
   z-index:2;
 }
+
 @keyframes beat{
   0%,100%{transform:translate(-50%,-50%) scale(1);}
   30%{transform:translate(-50%,-50%) scale(.9);}
@@ -225,7 +226,6 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 
           <div class="msg" id="msg" aria-live="polite">Gợi ý: mã 4 số ♥</div>
           <input id="hiddenPinInput" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" class="pin-hidden-input" />
-          <div class="small-hint">Mẹo: bấm & giữ nút xoá để xoá hết. Có thể dán số trực tiếp.</div>
         </div>
       </div>
 
@@ -418,7 +418,7 @@ toggleMaskBtn.addEventListener('click', ()=>{
 
 /* ------------------ HIỆU ỨNG TRÁI TIM ------------------- */
 var settings = {
-  particles:{length:800,duration:1.5,velocity:100,effect:-0.85,size:25}
+  particles:{length:700,duration:1.5,velocity:100,effect:-0.85,size:24}
 };
 (function(){
   var Point=function(x,y){this.x=x||0;this.y=y||0};
