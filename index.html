@@ -13,8 +13,8 @@
   --paper:#FFF8F9;
   --cover:#FFF0F5;
   --bg:#FFFFFF1A;
-  --card-w: 500px;   /* chiều rộng mục tiêu (preset VỪA) */
-  --card-ratio: 5/6; /* tỉ lệ rộng:cao của thiệp */
+  --card-w: 500px;
+  --card-ratio: 5/6;
 }
 
 *{box-sizing:border-box}
@@ -38,53 +38,47 @@ body{
   cursor:pointer;
   z-index:2;
 }
-
 @keyframes beat{
   0%,100%{transform:translate(-50%,-50%) scale(1);}
   30%{transform:translate(-50%,-50%) scale(.9);}
 }
 
 /* chữ “MỞ ĐI” trên tim */
-#openText {
-  position: absolute;
-  top: 48%; left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: "Dancing Script", cursive;
-  font-size: 20px;
-  font-weight: 800;
-  color: #ffb6c1;
-  text-shadow: 0 0 14px rgba(255, 105, 180, 0.6);
-  cursor: pointer;
-  z-index: 3;
-  letter-spacing: 1px;
+#openText{
+  position:absolute; top:48%; left:50%; transform:translate(-50%,-50%);
+  font-family:"Dancing Script", cursive; font-size:20px; font-weight:800;
+  color:#ffb6c1; text-shadow:0 0 14px rgba(255,105,180,.6);
+  cursor:pointer; z-index:3; letter-spacing:1px;
 }
 
 /* Thiệp (ẩn lúc đầu) */
 .hidden{display:none;}
 .stage{perspective:1600px;}
-/* Card responsive: vuông, co theo màn hình, không tràn */
+
+/* Card responsive: hơi cao (5/6), không tràn màn hình */
 .card{
-  position: relative;
-  width: min(560px, 96vw);   /* như bản đầu */
-  aspect-ratio: 5 / 6;       /* luôn vuông */
-  max-height: min(92vh, 720px); /* không vượt quá chiều cao màn hình */
-  height: auto;
-  background: var(--paper);
-  border-radius: 18px;
-  box-shadow: 0 28px 70px rgba(0,0,0,.18);
-  border: 1px solid rgba(0,0,0,.06);
-  overflow: hidden;
+  position:relative;
+  width:min(560px, 96vw);
+  aspect-ratio:5/6;
+  max-height:min(92vh, 720px);
+  height:auto;
+  background:var(--paper);
+  border-radius:18px;
+  box-shadow:0 28px 70px rgba(0,0,0,.18);
+  border:1px solid rgba(0,0,0,.06);
+  overflow:hidden;
 }
-.inner{
-  position:absolute; inset:0; display:grid; grid-template-columns:1fr 1fr;
-}
-.page{padding:28px 26px;}
+
+/* Trang trong */
+.inner{ position:absolute; inset:0; display:grid; grid-template-columns:1fr 1fr; z-index:1; }
+.page{ padding:28px 26px; }
 .left{
   background:radial-gradient(900px 260px at -10% 0%, rgba(233,78,119,.08), transparent 60%), var(--paper);
 }
 .right{
   background:radial-gradient(900px 260px at 110% 0%, rgba(233,78,119,.08), transparent 60%), var(--paper);
 }
+
 .ribbon{display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(233,78,119,.12);color:var(--brand);font-weight:800;letter-spacing:.3px;font-size:12px;}
 h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 .lead{color:var(--muted);font-size:18px;margin:0 0 12px}
@@ -92,109 +86,123 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 .big{font-size:22px;font-weight:800;line-height:1.35;}
 .note{color:var(--muted);margin-top:6px}
 
-/* bìa thiệp */
+/* Bìa gập */
 .cover{
-  position:absolute;top:0;bottom:0;right:0;width:50%;
-  transform-origin:left center;
-  transform-style:preserve-3d;
+  position:absolute; top:0; bottom:0; right:0; width:50%;
+  transform-origin:left center; transform-style:preserve-3d;
   transition:transform .9s cubic-bezier(.2,.7,.2,1);
   background:var(--cover);
   border-left:1px solid rgba(0,0,0,.06);
-  will-change: transform;
+  will-change:transform;
+  z-index:5;
 }
 .cover-outer,.cover-inner{
-  position:absolute;inset:0;backface-visibility:hidden;
-  display:flex;flex-direction:column;justify-content:center;align-items:center;
-  text-align:center;padding:32px;
+  position:absolute; inset:0; backface-visibility:hidden;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  text-align:center; padding:32px;
 }
 .cover-outer{
   background:radial-gradient(1200px 300px at 50% -10%, rgba(233,78,119,.12), transparent 60%), var(--cover);
 }
-.cover-inner{transform:rotateY(180deg);background:#fff7fa;}
-.card.open .cover{transform:rotateY(-180deg);}
+.cover-inner{ transform:rotateY(180deg); background:#fff7fa; }
+.card.open .cover{ transform:rotateY(-180deg); }
+
 .hint{text-align:center;margin-top:12px;color:var(--muted);font-size:14px}
 
-/* ================= PIN keypad (custom) ================= */
+/* ============ PIN overlay nửa trái + ẩn khi mở/in ============ */
+.pin-overlay-left{
+  position:absolute;
+  top: 40%;         /* 👈 cô thay đổi giá trị này để dịch lên/xuống */
+  left: 0;
+  width: 50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  z-index:8;                 /* nổi trên phần trong thiệp */
+  pointer-events:auto;
+  backdrop-filter: blur(2px);
+}
+.card.open .pin-overlay-left{
+  opacity:0; pointer-events:none; transition:opacity .35s ease;
+}
+@media print{
+  .pin-overlay-left{ display:none !important; }
+}
+
+/* Bên trong khung PIN: gọn & vừa khung thiệp */
 .pin-box{
-  margin-top:16px;background:#fff;border:1px solid rgba(0,0,0,.08);
-  border-radius:16px;padding:18px;text-align:center;user-select:none;
-  transition: box-shadow .25s ease, border-color .25s ease;
+  background:#fff;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:16px;
+  padding:16px 12px;
+  text-align:center; user-select:none;
+  width:100%; max-width:340px; margin:0 auto;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  transition:box-shadow .25s ease, border-color .25s ease;
 }
 .pin-box.success{ box-shadow:0 0 0 4px rgba(16,185,129,.2); border-color:#10b981; }
 .pin-box.error{ animation: pin-shake .4s; border-color:#ef4444; }
 @keyframes pin-shake{
-  10%, 90% { transform: translateX(-1px); }
-  20%, 80% { transform: translateX(2px); }
-  30%, 50%, 70% { transform: translateX(-4px); }
-  40%, 60% { transform: translateX(4px); }
+  10%,90%{transform:translateX(-1px);}
+  20%,80%{transform:translateX(2px);}
+  30%,50%,70%{transform:translateX(-4px);}
+  40%,60%{transform:translateX(4px);}
 }
+.pin-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.pin-title{ font-weight:700; color:#e94e77; letter-spacing:.3px; font-size:15px; }
+.pin-eye{ border:none; background:transparent; cursor:pointer; font-size:18px; line-height:1; opacity:.7; transition:opacity .2s ease, transform .1s ease; }
+.pin-eye:hover{ opacity:1; } .pin-eye:active{ transform:scale(.96); }
 
-.pin-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
-.pin-title{ font-weight:700; color:#e94e77; letter-spacing:.3px; }
-.pin-eye{
-  border:none; background:transparent; cursor:pointer; font-size:18px; line-height:1;
-  opacity:.7; transition:opacity .2s ease, transform .1s ease;
-}
-.pin-eye:hover{ opacity:1; }
-.pin-eye:active{ transform:scale(.96); }
-
-.pin-visual{ display:flex; justify-content:center; gap:12px; margin:10px 0 14px; }
+.pin-visual{ display:flex; justify-content:center; gap:8px; margin:8px 0 10px; }
 .pin-digit{
-  width:40px; height:50px; border-radius:12px;
+  width:34px; height:44px; border-radius:10px;
   border:2px solid rgba(0,0,0,.15);
   display:flex; align-items:center; justify-content:center;
-  font-weight:800; font-size:20px; color:#1f2937;
+  font-weight:800; font-size:18px; color:#1f2937;
   transition:border-color .2s ease, transform .08s ease;
 }
 .pin-digit.filled{ border-color:#e94e77; }
 .pin-digit.flash{ transform:scale(1.08); }
-.pin-digit .dot{ width:10px; height:10px; border-radius:50%; background:#1f2937; }
+.pin-digit .dot{ width:8px; height:8px; border-radius:50%; background:#1f2937; }
 
-.pin-progress{ height:6px; background:#f3f4f6; border-radius:999px; overflow:hidden; margin:0 14% 10px; }
+.pin-progress{ height:5px; background:#f3f4f6; border-radius:999px; overflow:hidden; margin:0 20% 10px; }
 .pin-progress-bar{ height:100%; width:0%; background:#e94e77; transition: width .2s ease; }
 
-.keypad{ display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; max-width:280px; margin:0 auto; }
+.keypad{ display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; max-width:260px; margin:0 auto; }
 .key{
-  padding:12px 0; font-size:18px; font-weight:700; background:#fff;
-  border:1px solid rgba(0,0,0,.1); border-radius:12px; cursor:pointer;
+  padding:10px 0; font-size:17px; font-weight:700; background:#fff;
+  border:1px solid rgba(0,0,0,.1); border-radius:10px; cursor:pointer;
   transition:transform .05s ease, background .15s ease, box-shadow .15s ease;
   box-shadow:0 2px 0 rgba(0,0,0,.05);
 }
-.key:hover{ background:#fff7fa; }
-.key:active{ transform:translateY(1px); }
+.key:hover{ background:#fff7fa; } .key:active{ transform:translateY(1px); }
 .key.accent{ background:var(--brand); color:#fff; border-color:transparent; }
 .key.icon{ font-weight:600; }
 
-.msg{margin-top:10px;color:var(--muted);font-size:13px;min-height:18px}
-.small-hint{margin-top:10px;color:#9ca3af;font-size:12px}
+.msg{ margin-top:8px; color:var(--muted); font-size:13px; min-height:18px; }
+.small-hint{ margin-top:8px; color:#9ca3af; font-size:12px; }
 .pin-hidden-input{ position:absolute; opacity:0; pointer-events:none; width:0; height:0; }
 
 /* Mobile tweaks */
-/* Mobile fix: hiển thị đủ thiệp, không bị khuất */
-@media (max-width: 640px){
+@media (max-width:640px){
   /* Cho phép cuộn dọc + chừa vùng notch */
-  html, body { height: auto; overflow-y: auto; }
-  body {
-    padding-top: max(10px, env(safe-area-inset-top));
-    padding-bottom: 16px;
-  }
+  html, body { height:auto; overflow-y:auto; }
+  body{ padding-top:max(10px, env(safe-area-inset-top)); padding-bottom:16px; }
 
-  /* Thu nhỏ trái tim để không đè nội dung (giữ nguyên nếu cô thích) */
-  #pinkboard{
-    width: min(70vw, 360px);
-    height: min(70vw, 360px);
-  }
+  /* Thu nhỏ trái tim */
+  #pinkboard{ width:min(70vw, 360px); height:min(70vw, 360px); }
 
-  /* Card giữ tỉ lệ vuông như bản đầu, chỉ thu nhỏ theo màn hình */
-  .card{
-    width: 94vw;
-    max-height: 86vh;
-    aspect-ratio: 1 / 1;   /* KHÔNG để auto nữa */
-    height: auto;
-    margin: 10px auto 20px;
-  }
+  /* Card vuông trên mobile theo ý cô trước */
+  .card{ width:94vw; max-height:86vh; aspect-ratio:1/1; height:auto; margin:10px auto 20px; }
 
-  /* Các phần mobile khác của cô giữ nguyên */
+  /* Overlay: full ngang cho dễ bấm */
+  .pin-overlay-left{ width:100%; left:0; justify-content:center; padding:12px; }
+
+  .pin-box{ padding:14px 10px; max-width:300px; }
+  .pin-digit{ width:30px; height:40px; font-size:16px; }
+  .keypad{ max-width:220px; gap:6px; }
+  .key{ padding:8px 0; font-size:16px; }
 }
 </style>
 </head>
@@ -210,54 +218,55 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
     <div class="inner">
       <div class="page left">
         <span class="ribbon">THIỆP TỈNH CỦM</span>
-        <h2 class = "big">Gửi đến em</h2>
-        <p class="lead">chức mừng 2 tháng mình bên nhau ợ - và 20-10 hẹ hẹ ❤️</p>
-
-        <!-- Hộp PIN custom -->
-        <div class="pin-box pin-theme" aria-label="Nhập mã PIN">
-          <div class="pin-header">
-            <div class="pin-title">NHÍ IU</div>
-            <button class="pin-eye" id="toggleMask" aria-label="Hiện/ẩn số" title="Hiện/ẩn số"></button>
-          </div>
-
-          <!-- chấm/digit (tự sinh theo độ dài PIN) -->
-          <div class="pin-visual" id="pinDots" aria-live="polite"></div>
-
-          <!-- tiến độ -->
-          <div class="pin-progress">
-            <div class="pin-progress-bar" id="pinProg"></div>
-          </div>
-
-          <!-- keypad -->
-          <div class="keypad" id="keypad" role="group" aria-label="Bàn phím số">
-            <button class="key" data-key="1">1</button>
-            <button class="key" data-key="2">2</button>
-            <button class="key" data-key="3">3</button>
-            <button class="key" data-key="4">4</button>
-            <button class="key" data-key="5">5</button>
-            <button class="key" data-key="6">6</button>
-            <button class="key" data-key="7">7</button>
-            <button class="key" data-key="8">8</button>
-            <button class="key" data-key="9">9</button>
-            <button class="key icon" data-action="clear" title="Xoá">⌫</button>
-            <button class="key" data-key="0">0</button>
-            <button class="key icon accent" data-action="ok" title="Xác nhận">OK</button>
-          </div>
-
-          <div class="msg" id="msg" aria-live="polite">Gợi ý: mã 4 số ♥</div>
-          <input id="hiddenPinInput" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" class="pin-hidden-input" />
-        </div>
+        <h2 class="big">Gửi đến Nhí IU cụa anh ợ</h2>
+        <p class="lead">Cảm ơn em đã là một phần cuộc sống của anh ₊· ͟͟͞͞➳❥ ♥‿♥</p>
       </div>
 
       <div class="page right">
         <div class="section-title">Lời nhắn</div>
         <div class="big">
-          “Cảm ơn em đã luôn bên anh.<br>Chúc em ngày mới thật vui vẻ và tràn đầy yêu thương.”
+          Chúc mừng ngày phụ nữ Việt Nam 20/10! và cũng 2 tháng mình bên nhau rồi. Ngày hôm nay anh muốn dành tất cả những lời chúc tốt đẹp nhất đến em, người con gái mà anh yêu thương. 
+          Cảm ơn em đã bên anh trong thời gian qua (cụ thể 2 tháng hẹ hẹ). Cảm ơn em luôn hiểu cho anh, em luôn là nguồn cảm hứng và lý do anh luôn cố gắng để trở thành người tốt hơn.<br>Chúc em ngày mới thật vui vẻ và tràn đầy yêu thương.
         </div>
         <p class="note" contenteditable="true">Từ anh, người luôn thương em ♥</p>
       </div>
     </div>
 
+    <!-- PIN overlay nửa trái -->
+    <div class="pin-overlay-left" id="pinOverlay">
+      <div class="pin-box pin-theme" aria-label="Nhập mã PIN">
+        <div class="pin-header">
+          <div class="pin-title">NHÍ IU</div>
+          <button class="pin-eye" id="toggleMask" aria-label="Hiện/ẩn số" title="Hiện/ẩn số"></button>
+        </div>
+
+        <div class="pin-visual" id="pinDots" aria-live="polite"></div>
+
+        <div class="pin-progress">
+          <div class="pin-progress-bar" id="pinProg"></div>
+        </div>
+
+        <div class="keypad" id="keypad" role="group" aria-label="Bàn phím số">
+          <button class="key" data-key="1">1</button>
+          <button class="key" data-key="2">2</button>
+          <button class="key" data-key="3">3</button>
+          <button class="key" data-key="4">4</button>
+          <button class="key" data-key="5">5</button>
+          <button class="key" data-key="6">6</button>
+          <button class="key" data-key="7">7</button>
+          <button class="key" data-key="8">8</button>
+          <button class="key" data-key="9">9</button>
+          <button class="key icon" data-action="clear" title="Xoá">⌫</button>
+          <button class="key" data-key="0">0</button>
+          <button class="key icon accent" data-action="ok" title="Xác nhận">OK</button>
+        </div>
+
+        <div class="msg" id="msg" aria-live="polite">Gợi ý: mã 4 số ♥</div>
+        <input id="hiddenPinInput" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" class="pin-hidden-input" />
+      </div>
+    </div>
+
+    <!-- Bìa -->
     <div class="cover" id="cover">
       <div class="cover-outer">
         <h2>Thiệp gửi riêng cho em</h2>
@@ -436,9 +445,7 @@ toggleMaskBtn.addEventListener('click', ()=>{
 });
 
 /* ------------------ HIỆU ỨNG TRÁI TIM ------------------- */
-var settings = {
-  particles:{length:700,duration:1.5,velocity:100,effect:-0.85,size:24}
-};
+var settings = { particles:{length:700,duration:1.5,velocity:100,effect:-0.85,size:24} };
 (function(){
   var Point=function(x,y){this.x=x||0;this.y=y||0};
   Point.prototype.clone=function(){return new Point(this.x,this.y)};
@@ -446,25 +453,15 @@ var settings = {
     if(len===undefined)return Math.sqrt(this.x*this.x+this.y*this.y);
     this.normalize();this.x*=len;this.y*=len;return this;
   };
-  Point.prototype.normalize=function(){
-    var l=this.length();this.x/=l;this.y/=l;return this;
-  };
-  var Particle=function(){
-    this.position=new Point();this.velocity=new Point();this.acceleration=new Point();this.age=0;
-  };
+  Point.prototype.normalize=function(){var l=this.length();this.x/=l;this.y/=l;return this;};
+  var Particle=function(){this.position=new Point();this.velocity=new Point();this.acceleration=new Point();this.age=0;};
   Particle.prototype.initialize=function(x,y,dx,dy){
-    this.position.x=x;this.position.y=y;
-    this.velocity.x=dx;this.velocity.y=dy;
-    this.acceleration.x=dx*settings.particles.effect;
-    this.acceleration.y=dy*settings.particles.effect;
-    this.age=0;
+    this.position.x=x;this.position.y=y; this.velocity.x=dx;this.velocity.y=dy;
+    this.acceleration.x=dx*settings.particles.effect; this.acceleration.y=dy*settings.particles.effect; this.age=0;
   };
   Particle.prototype.update=function(d){
-    this.position.x+=this.velocity.x*d;
-    this.position.y+=this.velocity.y*d;
-    this.velocity.x+=this.acceleration.x*d;
-    this.velocity.y+=this.acceleration.y*d;
-    this.age+=d;
+    this.position.x+=this.velocity.x*d; this.position.y+=this.velocity.y*d;
+    this.velocity.x+=this.acceleration.x*d; this.velocity.y+=this.acceleration.y*d; this.age+=d;
   };
   Particle.prototype.draw=function(ctx,img){
     var ease=t=>--t*t*t+1;
@@ -473,34 +470,19 @@ var settings = {
     ctx.drawImage(img,this.position.x-size/2,this.position.y-size/2,size,size);
   };
   var ParticlePool=function(l){
-    var particles=new Array(l);
-    for(let i=0;i<l;i++)particles[i]=new Particle();
+    var particles=new Array(l); for(let i=0;i<l;i++)particles[i]=new Particle();
     var firstActive=0,firstFree=0,duration=settings.particles.duration;
-    this.add=function(x,y,dx,dy){
-      particles[firstFree].initialize(x,y,dx,dy);
-      firstFree=(firstFree+1)%l;
-      if(firstActive===firstFree)firstActive=(firstActive+1)%l;
-    };
+    this.add=function(x,y,dx,dy){ particles[firstFree].initialize(x,y,dx,dy); firstFree=(firstFree+1)%l; if(firstActive===firstFree)firstActive=(firstActive+1)%l; };
     this.update=function(dt){
       var i;
-      if(firstActive<firstFree){
-        for(i=firstActive;i<firstFree;i++)particles[i].update(dt);
-      }else{
-        for(i=firstActive;i<l;i++)particles[i].update(dt);
-        for(i=0;i<firstFree;i++)particles[i].update(dt);
-      }
-      while(particles[firstActive].age>=duration && firstActive!==firstFree){
-        firstActive=(firstActive+1)%l;
-      }
+      if(firstActive<firstFree){ for(i=firstActive;i<firstFree;i++)particles[i].update(dt); }
+      else{ for(i=firstActive;i<l;i++)particles[i].update(dt); for(i=0;i<firstFree;i++)particles[i].update(dt); }
+      while(particles[firstActive].age>=duration && firstActive!==firstFree){ firstActive=(firstActive+1)%l; }
     };
     this.draw=function(ctx,img){
       var i;
-      if(firstActive<firstFree){
-        for(i=firstActive;i<firstFree;i++)particles[i].draw(ctx,img);
-      }else{
-        for(i=firstActive;i<l;i++)particles[i].draw(ctx,img);
-        for(i=0;i<firstFree;i++)particles[i].draw(ctx,img);
-      }
+      if(firstActive<firstFree){ for(i=firstActive;i<firstFree;i++)particles[i].draw(ctx,img); }
+      else{ for(i=firstActive;i<l;i++)particles[i].draw(ctx,img); for(i=0;i<firstFree;i++)particles[i].draw(ctx,img); }
     };
   };
 
@@ -529,7 +511,7 @@ var settings = {
       ctx2.beginPath();
       var t=-Math.PI,p=to(t);ctx2.moveTo(p.x,p.y);
       while(t<Math.PI){t+=0.01;p=to(t);ctx2.lineTo(p.x,p.y);}
-      ctx2.closePath();ctx2.fillStyle='#FF6F91';  
+      ctx2.closePath();ctx2.fillStyle='#FF6F91';
       ctx2.fill();
       var img=new Image();img.src=c.toDataURL();return img;
     })();
@@ -547,10 +529,7 @@ var settings = {
       particles.update(dt);
       particles.draw(ctx,image);
     }
-    function onResize(){
-      canvas.width=canvas.clientWidth;
-      canvas.height=canvas.clientHeight;
-    }
+    function onResize(){ canvas.width=canvas.clientWidth; canvas.height=canvas.clientHeight; }
     window.onresize=onResize;
     setTimeout(function(){onResize();render();},10);
   })(document.getElementById('pinkboard'));
@@ -558,4 +537,3 @@ var settings = {
 </script>
 </body>
 </html>
-
