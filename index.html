@@ -283,11 +283,11 @@ function updateVisual(){
 }
 function tryUnlock(){
   if(buffer===PIN){
-    msg.textContent="✔ Mật khẩu đúng! Thiệp đang mở...";
+    msg.textContent="Hy vọng lần đầu tiên đúng lunn";
     msg.style.color="green";
     card.classList.add('open');
   }else{
-    msg.textContent="❌ Áaaaaaaa có đứa kh iuuuuu!!!";
+    msg.textContent="❌ Áaaa có đứa kh iu!";
     msg.style.color="red";
     buffer="";
     updateVisual();
@@ -324,6 +324,7 @@ var settings={particles:{length:700,duration:1.5,velocity:100,effect:-0.85,size:
 </script>
 </body>
 </html>
+
 
 
 
