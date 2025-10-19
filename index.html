@@ -170,11 +170,35 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 
 /* Mobile tweaks */
 @media (max-width: 640px){
-  #pinkboard{ width:min(90vw, 600px); height:min(90vw, 600px);}
-  .card{ height:auto; }
-  .inner{ grid-template-columns:1fr; }
-  .cover{ width:100%; border-left:none; border-top:1px solid rgba(0,0,0,.06); transform-origin:top center; }
-  .card.open .cover{ transform:rotateX(-180deg); }
+  /* cho phép cuộn dọc khi nội dung dài */
+  body { overflow-y: auto; }
+
+  /* card tự co theo nội dung, không ép tỉ lệ trên mobile */
+  .card{
+    width: min(96vw, var(--card-w));
+    aspect-ratio: auto;   /* override lại */
+    height: auto;
+    max-height: none;     /* đừng giới hạn chiều cao */
+  }
+
+  /* VERY IMPORTANT: bỏ position:absolute để .inner cao theo nội dung */
+  .inner{
+    position: static;      /* thay vì absolute */
+    inset: auto;           /* xoá ràng buộc inset */
+    grid-template-columns: 1fr;  /* đã có, giữ nguyên */
+  }
+
+  /* giảm padding để bớt chiếm chỗ */
+  .page{ padding: 18px 16px; }
+
+  /* giữ logic bìa gập theo trục X */
+  .cover{
+    width:100%;
+    border-left:none;
+    border-top:1px solid rgba(0,0,0,.06);
+    transform-origin: top center;
+  }
+  .card.open .cover{ transform: rotateX(-180deg); }
 }
 </style>
 </head>
@@ -248,7 +272,6 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
       </div>
     </div>
   </div>
-  <div class="hint">Gợi ý: nhập đúng mã rồi bấm “OK”.</div>
 </div>
 
 <script>
@@ -539,4 +562,3 @@ var settings = {
 </script>
 </body>
 </html>
-
