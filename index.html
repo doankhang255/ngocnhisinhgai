@@ -8,31 +8,32 @@
 <style>
 :root{
   --brand:#e94e77;
-  --ink:#1f2937;
-  --muted:#6b7280;
-  --paper:#FFF8F9;
-  --cover:#FFF0F5;
-  --bg:#FFFFFF1A;
-  --card-w: 500px;
-  --card-ratio: 5/6;
+  --ink:#2f2a2a;
+  --muted:#6b5555;
+  --paper:#ffffff;
+  --cover:#fff0f6;
+  --edge:#f8c7d4;
+  --bg:#fff7fa;
 }
 
+/* ========== Bố cục tổng thể ========== */
 *{box-sizing:border-box}
 body{
-  margin:0; overflow:hidden;
-  min-height:100vh;
+  margin:0;
+  min-height:100dvh;
+  display:grid;
+  place-items:center;
   background:var(--bg);
+  color:var(--ink);
   font-family:"Nunito","Segoe UI",system-ui,sans-serif;
-  display:flex; justify-content:center; align-items:center;
+  padding:24px;
 }
 
-/* trái tim động */
+/* ========== Trái tim động ========== */
 #pinkboard{
   position:absolute;
-  top:50%; 
-  left:50%;
-  width: 600px;      /* 👈 chiều rộng trái tim */
-  height: 600px;     /* 👈 chiều cao trái tim (giữ vuông cho cân) */
+  top:50%; left:50%;
+  width:600px; height:600px;
   transform:translate(-50%,-50%);
   animation:beat 1.5s ease infinite;
   cursor:pointer;
@@ -42,8 +43,6 @@ body{
   0%,100%{transform:translate(-50%,-50%) scale(1);}
   30%{transform:translate(-50%,-50%) scale(.9);}
 }
-
-/* chữ “MỞ ĐI” trên tim */
 #openText{
   position:absolute; top:48%; left:50%; transform:translate(-50%,-50%);
   font-family:"Dancing Script", cursive; font-size:20px; font-weight:800;
@@ -51,51 +50,35 @@ body{
   cursor:pointer; z-index:3; letter-spacing:1px;
 }
 
-/* Thiệp (ẩn lúc đầu) */
+/* ========== Thiệp chính ========== */
 .hidden{display:none;}
 .stage{perspective:1600px;}
-
-/* Card responsive: hơi cao (5/6), không tràn màn hình */
-  .card{
-    position:relative;
-    width:min(520px, 96vw);
-    height:650px;
-    background:var(--paper);
-    border-radius:18px;
-    box-shadow:0 28px 70px rgba(0,0,0,.18);
-    border:1px solid var(--edge);
-    overflow:hidden;
-  }
-
-/* Trang trong */
-.inner{ position:absolute; inset:0; display:grid; grid-template-columns:1fr 1fr; z-index:1; }
-.page{ padding:28px 26px; }
+.card{
+  position:relative;
+  width:min(520px, 96vw);
+  height:520px;
+  background:var(--paper);
+  border-radius:18px;
+  box-shadow:0 28px 70px rgba(0,0,0,.18);
+  border:1px solid var(--edge);
+  overflow:hidden;
+}
+.inner{position:absolute; inset:0; display:grid; grid-template-columns:1fr 1fr; z-index:1;}
+.page{padding:28px 26px;}
 .left{
   background:radial-gradient(900px 260px at -10% 0%, rgba(233,78,119,.08), transparent 60%), var(--paper);
 }
 .right{
   background:radial-gradient(900px 260px at 110% 0%, rgba(233,78,119,.08), transparent 60%), var(--paper);
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  scrollbar-width:thin;
 }
-
-/* Cho phép phần lời nhắn cuộn nếu quá dài */
-.page.right{
-  position: relative;
-  overflow-y: auto;      /* 👈 bật cuộn dọc */
-  max-height: 100%;      /* giữ trong chiều cao thiệp */
-  padding-right: 10px;   /* chừa khoảng cho thanh cuộn */
-  scrollbar-width: thin; /* thanh cuộn mảnh cho trình duyệt hỗ trợ */
-}
-/* Tùy chỉnh thanh cuộn (cho Chrome, Edge, Safari) */
-.page.right::-webkit-scrollbar {
-  width: 6px;                 /* mảnh vừa phải */
-}
-.page.right::-webkit-scrollbar-thumb {
-  background: #e9a7b3;        /* hồng pastel dịu */
-  border-radius: 6px;
-}
-.page.right::-webkit-scrollbar-track {
-  background: transparent;
-}
+.page.right::-webkit-scrollbar{width:6px;}
+.page.right::-webkit-scrollbar-thumb{background:#e9a7b3;border-radius:6px;}
+.page.right::-webkit-scrollbar-track{background:transparent;}
 
 .ribbon{display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(233,78,119,.12);color:var(--brand);font-weight:800;letter-spacing:.3px;font-size:12px;}
 h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
@@ -110,20 +93,35 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
   font-weight:700;
   text-shadow: 0 0 6px rgba(233,78,119,0.2);
 }
-.yeu{
-  font-family: "Pacifico", cursive;
-  color:#1f1f1f;
-  font-size:28px;
-  font-weight:700;
+
+/* ========== Ảnh góc khi mở thiệp ========== */
+.cover-inner .corner-image-open {
+  position: relative;       /* 👈 đổi từ absolute sang relative để ảnh nằm ngay dưới chữ */
+  margin-top: 50px;         /* 👈 cách dòng chữ 1 chút */
+  display: flex;
+  justify-content: center;  /* 👈 căn giữa ảnh */
 }
-/* Bìa gập */
+
+.cover-inner .corner-image-open img {
+  width: 200px;             /* 👈 chỉnh kích thước ảnh tùy thích */
+  height: auto;
+  border-radius: 12px;
+  opacity: 0.95;
+  transition: transform 0.3s ease;
+}
+
+.cover-inner .corner-image-open img:hover {
+  transform: scale(1.05);
+}
+
+/* ========== Bìa gập ========== */
 .cover{
   position:absolute; top:0; bottom:0; right:0; width:50%;
   transform-origin:left center; transform-style:preserve-3d;
   transition:transform .9s cubic-bezier(.2,.7,.2,1);
   background:var(--cover);
-  border-left:1px solid rgba(0,0,0,.06);
-  will-change:transform;
+  border-left:1px solid var(--edge);
+  box-shadow:inset 0 0 0 1px var(--edge);
   z-index:5;
 }
 .cover-outer,.cover-inner{
@@ -134,108 +132,64 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 .cover-outer{
   background:radial-gradient(1200px 300px at 50% -10%, rgba(233,78,119,.12), transparent 60%), var(--cover);
 }
-.cover-inner{ transform:rotateY(180deg); background:#fff7fa; }
-.card.open .cover{ transform:rotateY(-180deg); }
+.cover-inner{transform:rotateY(180deg); background:linear-gradient(180deg, #fff, #fff7fa);}
+.card.open .cover{transform:rotateY(-180deg);}
 
-.hint{text-align:center;margin-top:12px;color:var(--muted);font-size:14px}
-
-/* ============ PIN overlay nửa trái + ẩn khi mở/in ============ */
+/* ========== PIN overlay ========== */
 .pin-overlay-left{
   position:absolute;
-  top: 40%;         /* 👈 cô thay đổi giá trị này để dịch lên/xuống */
+  top: 40%;
   left: 0;
   width: 50%;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:16px;
-  z-index:8;                 /* nổi trên phần trong thiệp */
+  z-index:8;
   pointer-events:auto;
-  backdrop-filter: blur(2px);
 }
-.card.open .pin-overlay-left{
-  opacity:0; pointer-events:none; transition:opacity .35s ease;
-}
-@media print{
-  .pin-overlay-left{ display:none !important; }
-}
-
-/* Bên trong khung PIN: gọn & vừa khung thiệp */
+.card.open .pin-overlay-left{opacity:0; pointer-events:none; transition:opacity .35s ease;}
 .pin-box{
   background:#fff;
   border:1px solid rgba(0,0,0,.08);
   border-radius:16px;
-  width: 280px;     /* 👈 chiều rộng tổng thể khung */
-  height: 300px;    /* 👈 chiều cao tổng thể khung */
+  width: 260px;
+  height: 280px;
   padding:14px 12px;
-  margin: 40px auto 0px;   /* căn giữa */
   text-align:center;
   user-select:none;
   box-shadow:0 4px 12px rgba(0,0,0,.08);
-  transition: box-shadow .25s ease, border-color .25s ease;
 }
-.pin-box.success{ box-shadow:0 0 0 4px rgba(16,185,129,.2); border-color:#10b981; }
-.pin-box.error{ animation: pin-shake .4s; border-color:#ef4444; }
-@keyframes pin-shake{
-  10%,90%{transform:translateX(-1px);}
-  20%,80%{transform:translateX(2px);}
-  30%,50%,70%{transform:translateX(-4px);}
-  40%,60%{transform:translateX(4px);}
-}
-.pin-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
-.pin-title{ font-weight:700; color:#e94e77; letter-spacing:.3px; font-size:15px; }
-.pin-eye{ border:none; background:transparent; cursor:pointer; font-size:18px; line-height:1; opacity:.7; transition:opacity .2s ease, transform .1s ease; }
-.pin-eye:hover{ opacity:1; } .pin-eye:active{ transform:scale(.96); }
-
-.pin-visual{ display:flex; justify-content:center; gap:8px; margin:8px 0 10px; }
+.pin-title{ font-weight:700; color:#e94e77; letter-spacing:.3px; font-size:15px;}
+.pin-visual{display:flex;justify-content:center;gap:8px;margin:8px 0 10px;}
 .pin-digit{
-  width:34px; height:44px; border-radius:10px;
+  width:32px; height:42px; border-radius:10px;
   border:2px solid rgba(0,0,0,.15);
   display:flex; align-items:center; justify-content:center;
   font-weight:800; font-size:18px; color:#1f2937;
-  transition:border-color .2s ease, transform .08s ease;
 }
-.pin-digit.filled{ border-color:#e94e77; }
-.pin-digit.flash{ transform:scale(1.08); }
-.pin-digit .dot{ width:8px; height:8px; border-radius:50%; background:#1f2937; }
-
-.pin-progress{ height:5px; background:#f3f4f6; border-radius:999px; overflow:hidden; margin:0 20% 10px; }
-.pin-progress-bar{ height:100%; width:0%; background:#e94e77; transition: width .2s ease; }
-
-.keypad{ display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; max-width:260px; margin:0 auto; }
+.pin-digit.filled{border-color:#e94e77;}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:240px;margin:0 auto;}
 .key{
-  padding:10px 0; font-size:17px; font-weight:700; background:#fff;
+  padding:8px 0; font-size:16px; font-weight:700; background:#fff;
   border:1px solid rgba(0,0,0,.1); border-radius:10px; cursor:pointer;
-  transition:transform .05s ease, background .15s ease, box-shadow .15s ease;
   box-shadow:0 2px 0 rgba(0,0,0,.05);
 }
-.key:hover{ background:#fff7fa; } .key:active{ transform:translateY(1px); }
-.key.accent{ background:var(--brand); color:#fff; border-color:transparent; }
-.key.icon{ font-weight:600; }
+.key:hover{background:#fff7fa;}
+.key.accent{background:var(--brand);color:#fff;border-color:transparent;}
+.msg{margin-top:6px;color:var(--muted);font-size:13px;}
 
-.msg{ margin-top:8px; color:var(--muted); font-size:13px; min-height:18px; }
-.small-hint{ margin-top:8px; color:#9ca3af; font-size:12px; }
-.pin-hidden-input{ position:absolute; opacity:0; pointer-events:none; width:0; height:0; }
+/* In luôn mở thiệp */
+@media print{
+  body{background:#fff}
+  .card{box-shadow:none; border:1px solid #ddd}
+  .cover{transform:rotateY(-180deg) !important}
+  .pin-overlay-left{display:none!important;}
+}
 
-/* Mobile tweaks */
-@media (max-width:640px){
-  /* Cho phép cuộn dọc + chừa vùng notch */
-  html, body { height:auto; overflow-y:auto; }
-  body{ padding-top:max(10px, env(safe-area-inset-top)); padding-bottom:16px; }
-
-  /* Thu nhỏ trái tim */
-  #pinkboard{ width:min(70vw, 360px); height:min(70vw, 360px); }
-
-  /* Card vuông trên mobile theo ý cô trước */
-  .card{ width:94vw; max-height:86vh; aspect-ratio:1/1; height:auto; margin:10px auto 20px; }
-
-  /* Overlay: full ngang cho dễ bấm */
-  .pin-overlay-left{ width:100%; left:0; justify-content:center; padding:12px; }
-
-  .pin-box{ padding:14px 10px; max-width:300px; }
-  .pin-digit{ width:30px; height:40px; font-size:16px; }
-  .keypad{ max-width:220px; gap:6px; }
-  .key{ padding:8px 0; font-size:16px; }
+/* Mobile */
+@media (max-width:740px){
+  .card{height:560px}
 }
 </style>
 </head>
@@ -245,325 +199,126 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 <canvas id="pinkboard"></canvas>
 <div id="openText">chạm vô đây ợ 💌</div>
 
-<!-- Thiệp (ẩn) -->
+<!-- Thiệp -->
 <div class="stage hidden" id="inviteStage">
   <div class="card" id="card">
     <div class="inner">
       <div class="page left">
-        <span class="ribbon">THIỆP TỈNH CỦM</span>
-        <h2 class="big title-love">Gửi đến Nhí IU cụa anh ợ</h2>
+        <span class="ribbon">THIỆP TỈNH CỤM</span>
+        <h1 class="title-love">Gửi đến Nhí IU cụa anh ợ</h1>
         <p class="lead">Cảm ơn em đã là một phần cuộc sống của anh ₊· ͟͟͞͞➳❥ ♥‿♥</p>
       </div>
 
       <div class="page right">
         <div class="section-title">Lời nhắn</div>
-        <div> <h3>Chúc mừng ngày phụ nữ Việt Nam 20/10! và cũng 2 tháng mình bên nhau rồi. Ngày hôm nay anh muốn dành tất cả những lời chúc tốt đẹp nhất đến em, người con gái mà anh yêu thương. 
+        <div><h4>Chúc mừng ngày phụ nữ Việt Nam 20/10! và cũng 2 tháng mình bên nhau rồi. Ngày hôm nay anh muốn dành tất cả những lời chúc tốt đẹp nhất đến em, người con gái mà anh yêu thương. 
           Cảm ơn em đã bên anh trong thời gian qua (cụ thể 2 tháng hẹ hẹ). Cảm ơn em luôn hiểu cho anh, em luôn là nguồn cảm hứng và lý do anh luôn cố gắng để trở thành người tốt hơn.
-          <br>Chúc em ngày mới thật vui vẻ và tràn đầy yêu thương.</h3>
-        </div>
+          <br>Chúc em ngày mới thật vui vẻ và tràn đầy yêu thương.</h4></div>
         <p class="note">Từ anh, người luôn yêu thương em ♥</p>
       </div>
     </div>
 
-    <!-- PIN overlay nửa trái -->
+    <!-- PIN overlay -->
     <div class="pin-overlay-left" id="pinOverlay">
       <div class="pin-box pin-theme" aria-label="Nhập mã PIN">
-        <div class="pin-header">
-          <div class="pin-title">NHÍ IU</div>
-          <button class="pin-eye" id="toggleMask" aria-label="Hiện/ẩn số" title="Hiện/ẩn số"></button>
+        <div class="pin-title">NHÍ IU</div>
+        <div class="pin-visual" id="pinDots"></div>
+        <div class="keypad" id="keypad">
+          <button class="key" data-key="1">1</button><button class="key" data-key="2">2</button><button class="key" data-key="3">3</button>
+          <button class="key" data-key="4">4</button><button class="key" data-key="5">5</button><button class="key" data-key="6">6</button>
+          <button class="key" data-key="7">7</button><button class="key" data-key="8">8</button><button class="key" data-key="9">9</button>
+          <button class="key" data-action="clear">⌫</button><button class="key" data-key="0">0</button><button class="key accent" data-action="ok">OK</button>
         </div>
-
-        <div class="pin-visual" id="pinDots" aria-live="polite"></div>
-
-        <div class="pin-progress">
-          <div class="pin-progress-bar" id="pinProg"></div>
-        </div>
-
-        <div class="keypad" id="keypad" role="group" aria-label="Bàn phím số">
-          <button class="key" data-key="1">1</button>
-          <button class="key" data-key="2">2</button>
-          <button class="key" data-key="3">3</button>
-          <button class="key" data-key="4">4</button>
-          <button class="key" data-key="5">5</button>
-          <button class="key" data-key="6">6</button>
-          <button class="key" data-key="7">7</button>
-          <button class="key" data-key="8">8</button>
-          <button class="key" data-key="9">9</button>
-          <button class="key icon" data-action="clear" title="Xoá">⌫</button>
-          <button class="key" data-key="0">0</button>
-          <button class="key icon accent" data-action="ok" title="Xác nhận">OK</button>
-        </div>
-
-        <div class="msg" id="msg" aria-live="polite">Gợi ý: mã 4 số ♥</div>
-        <input id="hiddenPinInput" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" class="pin-hidden-input" />
+        <div class="msg" id="msg">♥</div>
       </div>
     </div>
 
     <!-- Bìa -->
     <div class="cover" id="cover">
       <div class="cover-outer">
-        <p class="lead">nhập mật khẩu xongg bấm típ vô đây nè ﮩ٨ـﮩﮩ٨ـ♡ﮩ٨ـﮩﮩ٨ـ</p>
+        <p class="lead">nhập mật khẩu xongg bấm típ vô đây nè ﮩ٨ـ♡ﮩ٨ـ</p>
       </div>
       <div class="cover-inner">
         <p class="lead">♥ hello hí hí đọc nội dung bên trái óoo ♥</p>
+          <div class="corner-image-open">
+            <img src="./anh2.jpg" alt="Ảnh trang trí">
+          </div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-/* ------------------ LOGIC MỞ THIỆP ------------------- */
-const openText = document.getElementById('openText');
-const canvasHeart = document.getElementById('pinkboard');
-const stage = document.getElementById('inviteStage');
-const card = document.getElementById('card');
-openText.addEventListener('click', ()=>{
+const openText=document.getElementById('openText');
+const canvasHeart=document.getElementById('pinkboard');
+const stage=document.getElementById('inviteStage');
+const card=document.getElementById('card');
+openText.addEventListener('click',()=>{
   canvasHeart.style.display='none';
   openText.style.display='none';
   stage.classList.remove('hidden');
 });
 
-/* ------------------ PIN KEYPAD (custom) ------------------- */
-const PIN = "0812";               // đổi mã tại đây
-const maskDuration = 700;         // ms: hiện số thật 0.7s rồi che lại (khi đang ẩn)
-
-const msg = document.getElementById('msg');
-const pinDots = document.getElementById('pinDots');
-const pinProg = document.getElementById('pinProg');
-const keypad = document.getElementById('keypad');
-const pinBox = document.querySelector('.pin-box');
-const toggleMaskBtn = document.getElementById('toggleMask');
-const hiddenInput = document.getElementById('hiddenPinInput');
-
-let buffer = "";
-let showPlain = false;
-let lastFlashTimer = null;
+/* PIN logic */
+const PIN="0812";
+const msg=document.getElementById('msg');
+const pinDots=document.getElementById('pinDots');
+const keypad=document.getElementById('keypad');
+let buffer="";
 
 function buildDigits(){
-  pinDots.innerHTML = "";
+  pinDots.innerHTML="";
   for(let i=0;i<PIN.length;i++){
-    const d = document.createElement('div');
-    d.className = 'pin-digit';
-    d.dataset.index = i;
+    const d=document.createElement('div');
+    d.className='pin-digit';
     pinDots.appendChild(d);
   }
-  updateVisual();
 }
 buildDigits();
-
 function updateVisual(){
-  const pct = Math.min(100, Math.round(buffer.length / PIN.length * 100));
-  pinProg.style.width = pct + "%";
-
-  const digits = [...pinDots.children];
-  digits.forEach((el, i)=>{
-    el.classList.toggle('filled', i < buffer.length);
-    el.innerHTML = '';
-    if(i < buffer.length){
-      if(showPlain){ el.textContent = buffer[i]; }
-      else{
-        const dot = document.createElement('div');
-        dot.className = 'dot';
-        el.appendChild(dot);
-      }
-    }
+  [...pinDots.children].forEach((el,i)=>{
+    el.classList.toggle('filled',i<buffer.length);
+    el.innerHTML=i<buffer.length?'<div class="dot"></div>':'';
   });
 }
-
-function flashLast(){
-  if(!pinDots.children.length) return;
-  const idx = buffer.length - 1;
-  if(idx < 0) return;
-  const el = pinDots.children[idx];
-  el.classList.add('flash');
-  clearTimeout(lastFlashTimer);
-  lastFlashTimer = setTimeout(()=>el.classList.remove('flash'), 120);
-}
-
-function shakeError(){
-  pinBox.classList.remove('success');
-  pinBox.classList.add('error');
-  setTimeout(()=>pinBox.classList.remove('error'), 450);
-}
-function successPulse(){
-  pinBox.classList.add('success');
-  setTimeout(()=>pinBox.classList.remove('success'), 1200);
-}
-
 function tryUnlock(){
-  if(buffer.length !== PIN.length){
-    msg.textContent = `Nhập đủ ${PIN.length} số nhé!`;
-    msg.style.color = "#b45309";
-    shakeError();
-    return;
-  }
-  if(buffer === PIN){
-    msg.textContent = "✔ Mật khẩu đúng! Thiệp đang mở...";
-    msg.style.color = "green";
-    successPulse();
+  if(buffer===PIN){
+    msg.textContent="✔ Mật khẩu đúng! Thiệp đang mở...";
+    msg.style.color="green";
     card.classList.add('open');
   }else{
-    msg.textContent = "❌ Sai mã rồi, thử lại nhé!";
-    msg.style.color = "red";
-    buffer = "";
+    msg.textContent="❌ Sai mã rồi, thử lại nhé!";
+    msg.style.color="red";
+    buffer="";
     updateVisual();
-    shakeError();
   }
 }
-
-function pushDigit(d){
-  if(!/^\d$/.test(d)) return;
-  if(buffer.length >= PIN.length) return;
-  buffer += d;
-  updateVisual();
-  flashLast();
-
-  if(!showPlain){
-    const idx = buffer.length - 1;
-    const el = pinDots.children[idx];
-    el.textContent = d;
-    setTimeout(()=>{
-      if(buffer.length > idx && !showPlain){
-        el.innerHTML = '<div class="dot"></div>';
-      }
-    }, maskDuration);
-  }
-}
-function popDigit(){ buffer = buffer.slice(0,-1); updateVisual(); }
-function clearAll(){
-  buffer = "";
-  updateVisual();
-  msg.textContent = "Đã xoá, nhập lại nhé.";
-  msg.style.color = "#6b7280";
-}
-
-let clearHoldTimer = null;
-keypad.addEventListener('mousedown', (e)=>{
-  const btn = e.target.closest('.key[data-action="clear"]');
-  if(!btn) return;
-  clearHoldTimer = setTimeout(()=>{ clearAll(); }, 500);
-});
-window.addEventListener('mouseup', ()=>{ clearTimeout(clearHoldTimer); });
-keypad.addEventListener('mouseleave', ()=>{ clearTimeout(clearHoldTimer); });
-
-keypad.addEventListener('click', (e)=>{
-  const t = e.target.closest('.key');
-  if(!t) return;
-  const key = t.getAttribute('data-key');
-  const action = t.getAttribute('data-action');
-
-  if(key){ pushDigit(key); }
-  else if(action === 'clear'){ popDigit(); }
-  else if(action === 'ok'){ tryUnlock(); }
+keypad.addEventListener('click',(e)=>{
+  const t=e.target.closest('.key'); if(!t)return;
+  const key=t.dataset.key,act=t.dataset.action;
+  if(key){if(buffer.length<PIN.length){buffer+=key;updateVisual();}}
+  else if(act==="clear"){buffer=buffer.slice(0,-1);updateVisual();}
+  else if(act==="ok"){tryUnlock();}
 });
 
-window.addEventListener('keydown', (e)=>{
-  if(/^\d$/.test(e.key)) pushDigit(e.key);
-  else if(e.key === 'Backspace') popDigit();
-  else if(e.key === 'Enter') tryUnlock();
-});
-
-hiddenInput.addEventListener('input', ()=>{
-  const val = (hiddenInput.value || "").replace(/\D/g,'');
-  if(!val) return;
-  for(const ch of val){ pushDigit(ch); }
-  hiddenInput.value = "";
-});
-pinBox.addEventListener('click', ()=> hiddenInput.focus());
-
-toggleMaskBtn.addEventListener('click', ()=>{
-  showPlain = !showPlain;
-  updateVisual();
-});
-
-/* ------------------ HIỆU ỨNG TRÁI TIM ------------------- */
-var settings = { particles:{length:700,duration:1.5,velocity:100,effect:-0.85,size:24} };
+/* Hiệu ứng tim */
+var settings={particles:{length:700,duration:1.5,velocity:100,effect:-0.85,size:24}};
 (function(){
   var Point=function(x,y){this.x=x||0;this.y=y||0};
   Point.prototype.clone=function(){return new Point(this.x,this.y)};
-  Point.prototype.length=function(len){
-    if(len===undefined)return Math.sqrt(this.x*this.x+this.y*this.y);
-    this.normalize();this.x*=len;this.y*=len;return this;
-  };
+  Point.prototype.length=function(len){if(len===undefined)return Math.sqrt(this.x*this.x+this.y*this.y);this.normalize();this.x*=len;this.y*=len;return this;};
   Point.prototype.normalize=function(){var l=this.length();this.x/=l;this.y/=l;return this;};
   var Particle=function(){this.position=new Point();this.velocity=new Point();this.acceleration=new Point();this.age=0;};
-  Particle.prototype.initialize=function(x,y,dx,dy){
-    this.position.x=x;this.position.y=y; this.velocity.x=dx;this.velocity.y=dy;
-    this.acceleration.x=dx*settings.particles.effect; this.acceleration.y=dy*settings.particles.effect; this.age=0;
-  };
-  Particle.prototype.update=function(d){
-    this.position.x+=this.velocity.x*d; this.position.y+=this.velocity.y*d;
-    this.velocity.x+=this.acceleration.x*d; this.velocity.y+=this.acceleration.y*d; this.age+=d;
-  };
-  Particle.prototype.draw=function(ctx,img){
-    var ease=t=>--t*t*t+1;
-    var size=img.width*ease(this.age/settings.particles.duration);
-    ctx.globalAlpha=1-this.age/settings.particles.duration;
-    ctx.drawImage(img,this.position.x-size/2,this.position.y-size/2,size,size);
-  };
-  var ParticlePool=function(l){
-    var particles=new Array(l); for(let i=0;i<l;i++)particles[i]=new Particle();
-    var firstActive=0,firstFree=0,duration=settings.particles.duration;
-    this.add=function(x,y,dx,dy){ particles[firstFree].initialize(x,y,dx,dy); firstFree=(firstFree+1)%l; if(firstActive===firstFree)firstActive=(firstActive+1)%l; };
-    this.update=function(dt){
-      var i;
-      if(firstActive<firstFree){ for(i=firstActive;i<firstFree;i++)particles[i].update(dt); }
-      else{ for(i=firstActive;i<l;i++)particles[i].update(dt); for(i=0;i<firstFree;i++)particles[i].update(dt); }
-      while(particles[firstActive].age>=duration && firstActive!==firstFree){ firstActive=(firstActive+1)%l; }
-    };
-    this.draw=function(ctx,img){
-      var i;
-      if(firstActive<firstFree){ for(i=firstActive;i<firstFree;i++)particles[i].draw(ctx,img); }
-      else{ for(i=firstActive;i<l;i++)particles[i].draw(ctx,img); for(i=0;i<firstFree;i++)particles[i].draw(ctx,img); }
-    };
-  };
-
-  (function(canvas){
-    var ctx=canvas.getContext('2d');
-    var particles=new ParticlePool(settings.particles.length);
-    var particleRate=settings.particles.length/settings.particles.duration;
-    var time;
-
-    function pointOnHeart(t){
-      return new Point(
-        160*Math.pow(Math.sin(t),3),
-        130*Math.cos(t)-50*Math.cos(2*t)-20*Math.cos(3*t)-10*Math.cos(4*t)+25
-      );
-    }
-
-    var image=(function(){
-      var c=document.createElement('canvas'),ctx2=c.getContext('2d');
-      c.width=settings.particles.size;c.height=settings.particles.size;
-      function to(t){
-        var p=pointOnHeart(t);
-        p.x=settings.particles.size/3+p.x*settings.particles.size/550;
-        p.y=settings.particles.size/3-p.y*settings.particles.size/550;
-        return p;
-      }
-      ctx2.beginPath();
-      var t=-Math.PI,p=to(t);ctx2.moveTo(p.x,p.y);
-      while(t<Math.PI){t+=0.01;p=to(t);ctx2.lineTo(p.x,p.y);}
-      ctx2.closePath();ctx2.fillStyle='#FF6F91';
-      ctx2.fill();
-      var img=new Image();img.src=c.toDataURL();return img;
-    })();
-
-    function render(){
-      requestAnimationFrame(render);
-      var newTime=new Date().getTime()/1000,dt=newTime-(time||newTime);time=newTime;
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      var amount=particleRate*dt;
-      for(var i=0;i<amount;i++){
-        var pos=pointOnHeart(Math.PI-2*Math.PI*Math.random());
-        var dir=pos.clone().length(settings.particles.velocity);
-        particles.add(canvas.width/2+pos.x,canvas.height/2-pos.y,dir.x,-dir.y);
-      }
-      particles.update(dt);
-      particles.draw(ctx,image);
-    }
-    function onResize(){ canvas.width=canvas.clientWidth; canvas.height=canvas.clientHeight; }
-    window.onresize=onResize;
-    setTimeout(function(){onResize();render();},10);
+  Particle.prototype.initialize=function(x,y,dx,dy){this.position.x=x;this.position.y=y;this.velocity.x=dx;this.velocity.y=dy;this.acceleration.x=dx*settings.particles.effect;this.acceleration.y=dy*settings.particles.effect;this.age=0;};
+  Particle.prototype.update=function(d){this.position.x+=this.velocity.x*d;this.position.y+=this.velocity.y*d;this.velocity.x+=this.acceleration.x*d;this.velocity.y+=this.acceleration.y*d;this.age+=d;};
+  Particle.prototype.draw=function(ctx,img){var ease=t=>--t*t*t+1;var size=img.width*ease(this.age/settings.particles.duration);ctx.globalAlpha=1-this.age/settings.particles.duration;ctx.drawImage(img,this.position.x-size/2,this.position.y-size/2,size,size);};
+  var ParticlePool=function(l){var p=new Array(l);for(let i=0;i<l;i++)p[i]=new Particle();var fa=0,ff=0,d=settings.particles.duration;this.add=function(x,y,dx,dy){p[ff].initialize(x,y,dx,dy);ff=(ff+1)%l;if(fa===ff)fa=(fa+1)%l;};this.update=function(dt){if(fa<ff){for(let i=fa;i<ff;i++)p[i].update(dt);}else{for(let i=fa;i<l;i++)p[i].update(dt);for(let i=0;i<ff;i++)p[i].update(dt);}while(p[fa].age>=d&&fa!==ff){fa=(fa+1)%l;}};this.draw=function(ctx,img){if(fa<ff){for(let i=fa;i<ff;i++)p[i].draw(ctx,img);}else{for(let i=fa;i<l;i++)p[i].draw(ctx,img);for(let i=0;i<ff;i++)p[i].draw(ctx,img);}};};
+  (function(cvs){var ctx=cvs.getContext('2d');var parts=new ParticlePool(settings.particles.length);var rate=settings.particles.length/settings.particles.duration;var time;function heart(t){return new Point(160*Math.pow(Math.sin(t),3),130*Math.cos(t)-50*Math.cos(2*t)-20*Math.cos(3*t)-10*Math.cos(4*t)+25);}
+    var img=(function(){var c=document.createElement('canvas'),cx=c.getContext('2d');c.width=settings.particles.size;c.height=settings.particles.size;function to(t){var p=heart(t);p.x=settings.particles.size/3+p.x*settings.particles.size/550;p.y=settings.particles.size/3-p.y*settings.particles.size/550;return p;}
+    cx.beginPath();var t=-Math.PI,p=to(t);cx.moveTo(p.x,p.y);while(t<Math.PI){t+=0.01;p=to(t);cx.lineTo(p.x,p.y);}cx.closePath();cx.fillStyle='#FF6F91';cx.fill();var img=new Image();img.src=c.toDataURL();return img;})();
+    function render(){requestAnimationFrame(render);var nt=new Date().getTime()/1000,dt=nt-(time||nt);time=nt;ctx.clearRect(0,0,cvs.width,cvs.height);var amt=rate*dt;for(var i=0;i<amt;i++){var pos=heart(Math.PI-2*Math.PI*Math.random());var dir=pos.clone().length(settings.particles.velocity);parts.add(cvs.width/2+pos.x,cvs.height/2-pos.y,dir.x,-dir.y);}parts.update(dt);parts.draw(ctx,img);}
+    function resize(){cvs.width=cvs.clientWidth;cvs.height=cvs.clientHeight;}
+    window.onresize=resize;setTimeout(function(){resize();render();},10);
   })(document.getElementById('pinkboard'));
 })();
 </script>
