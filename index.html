@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Thiệp tình yêu 💌</title>
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Nunito:wght@400;600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
 <style>
 :root{
   --brand:#e94e77;
@@ -13,6 +13,8 @@
   --paper:#fffdf8;
   --cover:#fff;
   --bg:#FFFFFF1A;
+  --card-w: 500px;   /* chiều rộng mục tiêu (preset VỪA) */
+  --card-ratio: 3/4; /* tỉ lệ rộng:cao của thiệp */
 }
 
 *{box-sizing:border-box}
@@ -20,7 +22,7 @@ body{
   margin:0; overflow:hidden;
   min-height:100vh;
   background:var(--bg);
-  font-family:"Segoe UI",system-ui,sans-serif;
+  font-family:"Nunito","Segoe UI",system-ui,sans-serif;
   display:flex; justify-content:center; align-items:center;
 }
 
@@ -29,8 +31,8 @@ body{
   position:absolute;
   top:50%; 
   left:50%;
-  width:600px; 
-  height:600px;
+  width:500px; 
+  height:500px;
   transform:translate(-50%,-50%);
   animation:beat 1.5s ease infinite;
   cursor:pointer;
@@ -47,7 +49,7 @@ body{
   top: 48%; left: 50%;
   transform: translate(-50%, -50%);
   font-family: "Dancing Script", cursive;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 800;
   color: #ffb6c1;
   text-shadow: 0 0 14px rgba(255, 105, 180, 0.6);
@@ -56,16 +58,21 @@ body{
   letter-spacing: 1px;
 }
 
-
 /* Thiệp (ẩn lúc đầu) */
 .hidden{display:none;}
 .stage{perspective:1600px;}
 .card{
-  position:relative; width:min(820px,96vw); height:520px;
-  background:var(--paper);
-  border-radius:18px; box-shadow:0 28px 70px rgba(0,0,0,.18);
-  border:1px solid rgba(0,0,0,.06); overflow:hidden;
+  position: relative;
+  width: min(var(--card-w), 96vw);
+  aspect-ratio: var(--card-ratio);   /* tự tính chiều cao theo tỉ lệ */
+  height: auto;                      /* để aspect-ratio quản */
+  background: var(--paper);
+  border-radius: 18px;
+  box-shadow: 0 28px 70px rgba(0,0,0,.18);
+  border: 1px solid rgba(0,0,0,.06);
+  overflow: hidden;
 }
+
 .inner{
   position:absolute; inset:0; display:grid; grid-template-columns:1fr 1fr;
 }
@@ -91,6 +98,7 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
   transition:transform .9s cubic-bezier(.2,.7,.2,1);
   background:var(--cover);
   border-left:1px solid rgba(0,0,0,.06);
+  will-change: transform;
 }
 .cover-outer,.cover-inner{
   position:absolute;inset:0;backface-visibility:hidden;
@@ -104,42 +112,120 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
 .card.open .cover{transform:rotateY(-180deg);}
 .hint{text-align:center;margin-top:12px;color:var(--muted);font-size:14px}
 
-/* ô mật khẩu */
-.password-box{
-  margin-top:20px;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:16px;text-align:center;
+/* ================= PIN keypad (custom) ================= */
+.pin-box{
+  margin-top:16px;background:#fff;border:1px solid rgba(0,0,0,.08);
+  border-radius:16px;padding:18px;text-align:center;user-select:none;
+  transition: box-shadow .25s ease, border-color .25s ease;
 }
-.password-box input{
-  padding:8px 10px;border:1px solid rgba(0,0,0,.2);border-radius:8px;width:70%;
-  font-size:15px;outline:none;
+.pin-box.success{ box-shadow:0 0 0 4px rgba(16,185,129,.2); border-color:#10b981; }
+.pin-box.error{ animation: pin-shake .4s; border-color:#ef4444; }
+@keyframes pin-shake{
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
 }
-.password-box button{
-  margin-top:10px;padding:8px 12px;border:none;background:var(--brand);color:#fff;
-  border-radius:8px;font-weight:700;cursor:pointer;
+
+.pin-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.pin-title{ font-weight:700; color:#e94e77; letter-spacing:.3px; }
+.pin-eye{
+  border:none; background:transparent; cursor:pointer; font-size:18px; line-height:1;
+  opacity:.7; transition:opacity .2s ease, transform .1s ease;
 }
-.msg{margin-top:8px;color:var(--muted);font-size:13px}
+.pin-eye:hover{ opacity:1; }
+.pin-eye:active{ transform:scale(.96); }
+
+.pin-visual{ display:flex; justify-content:center; gap:12px; margin:10px 0 14px; }
+.pin-digit{
+  width:40px; height:50px; border-radius:12px;
+  border:2px solid rgba(0,0,0,.15);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:20px; color:#1f2937;
+  transition:border-color .2s ease, transform .08s ease;
+}
+.pin-digit.filled{ border-color:#e94e77; }
+.pin-digit.flash{ transform:scale(1.08); }
+.pin-digit .dot{ width:10px; height:10px; border-radius:50%; background:#1f2937; }
+
+.pin-progress{ height:6px; background:#f3f4f6; border-radius:999px; overflow:hidden; margin:0 14% 10px; }
+.pin-progress-bar{ height:100%; width:0%; background:#e94e77; transition: width .2s ease; }
+
+.keypad{ display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; max-width:280px; margin:0 auto; }
+.key{
+  padding:12px 0; font-size:18px; font-weight:700; background:#fff;
+  border:1px solid rgba(0,0,0,.1); border-radius:12px; cursor:pointer;
+  transition:transform .05s ease, background .15s ease, box-shadow .15s ease;
+  box-shadow:0 2px 0 rgba(0,0,0,.05);
+}
+.key:hover{ background:#fff7fa; }
+.key:active{ transform:translateY(1px); }
+.key.accent{ background:var(--brand); color:#fff; border-color:transparent; }
+.key.icon{ font-weight:600; }
+
+.msg{margin-top:10px;color:var(--muted);font-size:13px;min-height:18px}
+.small-hint{margin-top:10px;color:#9ca3af;font-size:12px}
+.pin-hidden-input{ position:absolute; opacity:0; pointer-events:none; width:0; height:0; }
+
+/* Mobile tweaks */
+@media (max-width: 640px){
+  #pinkboard{ width:min(90vw, 600px); height:min(90vw, 600px);}
+  .card{ height:auto; }
+  .inner{ grid-template-columns:1fr; }
+  .cover{ width:100%; border-left:none; border-top:1px solid rgba(0,0,0,.06); transform-origin:top center; }
+  .card.open .cover{ transform:rotateX(-180deg); }
+}
 </style>
 </head>
 <body>
 
 <!-- Trái tim động -->
 <canvas id="pinkboard"></canvas>
-<div id="openText">nhấn vô đây nha 💌</div>
-
+<div id="openText">chạm vô đây ợ 💌</div>
 
 <!-- Thiệp (ẩn) -->
 <div class="stage hidden" id="inviteStage">
   <div class="card" id="card">
     <div class="inner">
       <div class="page left">
-        <span class="ribbon">THIỆP TÌNH YÊU</span>
+        <span class="ribbon">THIỆP TỈNH CỦM</span>
         <h1 contenteditable="true">Gửi đến em</h1>
-        <p class="lead" contenteditable="true">Muốn đọc lời anh gửi – hãy nhập mật khẩu nhé 💌</p>
+        <p class="lead" contenteditable="true">Muốn đọc lời anh gửi – hãy nhập mã số nhé 💌</p>
 
-        <div class="password-box">
-          <input type="password" id="pw" placeholder="Nhập mật khẩu...">
-          <br>
-          <button id="checkBtn">Mở thiệp</button>
-          <div class="msg" id="msg">Gợi ý: tên viết tắt của hai đứa ♥</div>
+        <!-- Hộp PIN custom -->
+        <div class="pin-box pin-theme" aria-label="Nhập mã PIN">
+          <div class="pin-header">
+            <div class="pin-title">Nhập mã số</div>
+            <button class="pin-eye" id="toggleMask" aria-label="Hiện/ẩn số" title="Hiện/ẩn số"></button>
+          </div>
+
+          <!-- chấm/digit (tự sinh theo độ dài PIN) -->
+          <div class="pin-visual" id="pinDots" aria-live="polite"></div>
+
+          <!-- tiến độ -->
+          <div class="pin-progress">
+            <div class="pin-progress-bar" id="pinProg"></div>
+          </div>
+
+          <!-- keypad -->
+          <div class="keypad" id="keypad" role="group" aria-label="Bàn phím số">
+            <button class="key" data-key="1">1</button>
+            <button class="key" data-key="2">2</button>
+            <button class="key" data-key="3">3</button>
+            <button class="key" data-key="4">4</button>
+            <button class="key" data-key="5">5</button>
+            <button class="key" data-key="6">6</button>
+            <button class="key" data-key="7">7</button>
+            <button class="key" data-key="8">8</button>
+            <button class="key" data-key="9">9</button>
+            <button class="key icon" data-action="clear" title="Xoá">⌫</button>
+            <button class="key" data-key="0">0</button>
+            <button class="key icon accent" data-action="ok" title="Xác nhận">OK</button>
+          </div>
+
+          <div class="msg" id="msg" aria-live="polite">Gợi ý: mã 4 số ♥</div>
+          <input id="hiddenPinInput" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" class="pin-hidden-input" />
+          <div class="small-hint">Mẹo: bấm & giữ nút xoá để xoá hết. Có thể dán số trực tiếp.</div>
         </div>
       </div>
 
@@ -155,42 +241,179 @@ h1{font-size:36px;line-height:1.15;margin:12px 0 8px}
     <div class="cover" id="cover">
       <div class="cover-outer">
         <h2>Thiệp gửi riêng cho em</h2>
-        <p class="lead">Bấm để mở</p>
+        <p class="lead">Chạm để mở</p>
       </div>
       <div class="cover-inner">
         <p class="lead">♥ Anh rất vui vì em đã mở thiệp ♥</p>
       </div>
     </div>
   </div>
-  <div class="hint">Gợi ý: nhập đúng mật khẩu rồi bấm “Mở thiệp”.</div>
+  <div class="hint">Gợi ý: nhập đúng mã rồi bấm “OK”.</div>
 </div>
 
 <script>
-/* ------------------ LOGIC ------------------- */
+/* ------------------ LOGIC MỞ THIỆP ------------------- */
 const openText = document.getElementById('openText');
 const canvasHeart = document.getElementById('pinkboard');
 const stage = document.getElementById('inviteStage');
 const card = document.getElementById('card');
-const btn = document.getElementById('checkBtn');
-const msg = document.getElementById('msg');
-const pw = document.getElementById('pw');
-const password = "HN"; // mật khẩu
-
 openText.addEventListener('click', ()=>{
   canvasHeart.style.display='none';
   openText.style.display='none';
   stage.classList.remove('hidden');
 });
 
-btn.addEventListener('click', ()=>{
-  if(pw.value.trim().toLowerCase()===password.toLowerCase()){
-    card.classList.add('open');
-    msg.textContent="✔ Mật khẩu đúng! Thiệp đang mở...";
-    msg.style.color="green";
-  }else{
-    msg.textContent="❌ Sai mật khẩu rồi, thử lại nhé!";
-    msg.style.color="red";
+/* ------------------ PIN KEYPAD (custom) ------------------- */
+const PIN = "0812";               // đổi mã tại đây
+const maskDuration = 700;         // ms: hiện số thật 0.7s rồi che lại (khi đang ẩn)
+
+const msg = document.getElementById('msg');
+const pinDots = document.getElementById('pinDots');
+const pinProg = document.getElementById('pinProg');
+const keypad = document.getElementById('keypad');
+const pinBox = document.querySelector('.pin-box');
+const toggleMaskBtn = document.getElementById('toggleMask');
+const hiddenInput = document.getElementById('hiddenPinInput');
+
+let buffer = "";
+let showPlain = false;
+let lastFlashTimer = null;
+
+function buildDigits(){
+  pinDots.innerHTML = "";
+  for(let i=0;i<PIN.length;i++){
+    const d = document.createElement('div');
+    d.className = 'pin-digit';
+    d.dataset.index = i;
+    pinDots.appendChild(d);
   }
+  updateVisual();
+}
+buildDigits();
+
+function updateVisual(){
+  const pct = Math.min(100, Math.round(buffer.length / PIN.length * 100));
+  pinProg.style.width = pct + "%";
+
+  const digits = [...pinDots.children];
+  digits.forEach((el, i)=>{
+    el.classList.toggle('filled', i < buffer.length);
+    el.innerHTML = '';
+    if(i < buffer.length){
+      if(showPlain){ el.textContent = buffer[i]; }
+      else{
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        el.appendChild(dot);
+      }
+    }
+  });
+}
+
+function flashLast(){
+  if(!pinDots.children.length) return;
+  const idx = buffer.length - 1;
+  if(idx < 0) return;
+  const el = pinDots.children[idx];
+  el.classList.add('flash');
+  clearTimeout(lastFlashTimer);
+  lastFlashTimer = setTimeout(()=>el.classList.remove('flash'), 120);
+}
+
+function shakeError(){
+  pinBox.classList.remove('success');
+  pinBox.classList.add('error');
+  setTimeout(()=>pinBox.classList.remove('error'), 450);
+}
+function successPulse(){
+  pinBox.classList.add('success');
+  setTimeout(()=>pinBox.classList.remove('success'), 1200);
+}
+
+function tryUnlock(){
+  if(buffer.length !== PIN.length){
+    msg.textContent = `Nhập đủ ${PIN.length} số nhé!`;
+    msg.style.color = "#b45309";
+    shakeError();
+    return;
+  }
+  if(buffer === PIN){
+    msg.textContent = "✔ Mật khẩu đúng! Thiệp đang mở...";
+    msg.style.color = "green";
+    successPulse();
+    card.classList.add('open');
+  }else{
+    msg.textContent = "❌ Sai mã rồi, thử lại nhé!";
+    msg.style.color = "red";
+    buffer = "";
+    updateVisual();
+    shakeError();
+  }
+}
+
+function pushDigit(d){
+  if(!/^\d$/.test(d)) return;
+  if(buffer.length >= PIN.length) return;
+  buffer += d;
+  updateVisual();
+  flashLast();
+
+  if(!showPlain){
+    const idx = buffer.length - 1;
+    const el = pinDots.children[idx];
+    el.textContent = d;
+    setTimeout(()=>{
+      if(buffer.length > idx && !showPlain){
+        el.innerHTML = '<div class="dot"></div>';
+      }
+    }, maskDuration);
+  }
+}
+function popDigit(){ buffer = buffer.slice(0,-1); updateVisual(); }
+function clearAll(){
+  buffer = "";
+  updateVisual();
+  msg.textContent = "Đã xoá, nhập lại nhé.";
+  msg.style.color = "#6b7280";
+}
+
+let clearHoldTimer = null;
+keypad.addEventListener('mousedown', (e)=>{
+  const btn = e.target.closest('.key[data-action="clear"]');
+  if(!btn) return;
+  clearHoldTimer = setTimeout(()=>{ clearAll(); }, 500);
+});
+window.addEventListener('mouseup', ()=>{ clearTimeout(clearHoldTimer); });
+keypad.addEventListener('mouseleave', ()=>{ clearTimeout(clearHoldTimer); });
+
+keypad.addEventListener('click', (e)=>{
+  const t = e.target.closest('.key');
+  if(!t) return;
+  const key = t.getAttribute('data-key');
+  const action = t.getAttribute('data-action');
+
+  if(key){ pushDigit(key); }
+  else if(action === 'clear'){ popDigit(); }
+  else if(action === 'ok'){ tryUnlock(); }
+});
+
+window.addEventListener('keydown', (e)=>{
+  if(/^\d$/.test(e.key)) pushDigit(e.key);
+  else if(e.key === 'Backspace') popDigit();
+  else if(e.key === 'Enter') tryUnlock();
+});
+
+hiddenInput.addEventListener('input', ()=>{
+  const val = (hiddenInput.value || "").replace(/\D/g,'');
+  if(!val) return;
+  for(const ch of val){ pushDigit(ch); }
+  hiddenInput.value = "";
+});
+pinBox.addEventListener('click', ()=> hiddenInput.focus());
+
+toggleMaskBtn.addEventListener('click', ()=>{
+  showPlain = !showPlain;
+  updateVisual();
 });
 
 /* ------------------ HIỆU ỨNG TRÁI TIM ------------------- */
@@ -316,5 +539,3 @@ var settings = {
 </script>
 </body>
 </html>
-
-
